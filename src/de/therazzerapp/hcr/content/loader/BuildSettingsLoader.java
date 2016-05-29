@@ -34,9 +34,9 @@ public class BuildSettingsLoader {
                     getVRADSettings(new File(file,"vrad.json")),
                     getVBSPSettings(new File(file,"vbsp.json")),
                     getVVISSettings(new File(file,"vvis.json")),
-                    BuildProgramManager.getBuildProgram(root.getString("vbsp")),
-                    BuildProgramManager.getBuildProgram(root.getString("vvis")),
-                    BuildProgramManager.getBuildProgram(root.getString("vrad")),
+                    root.getString("vbsp").equals("null") ? null : BuildProgramManager.getBuildProgram(root.getString("vbsp")),
+                    root.getString("vvis").equals("null") ? null : BuildProgramManager.getBuildProgram(root.getString("vvis")),
+                    root.getString("vrad").equals("null") ? null : BuildProgramManager.getBuildProgram(root.getString("vrad")),
                     file.getName().replace(".json",""),
                     root.getString("name"),
                     root.getString("comment")));

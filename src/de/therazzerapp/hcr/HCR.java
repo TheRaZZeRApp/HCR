@@ -66,6 +66,43 @@ public class HCR {
         return autoclose;
     }
 
+
+    public static void openToolPresetDialoga(){
+        toolPresetsFrame.setContentPane(toolPresets_gui.getjPanel());
+        toolPresetsFrame.setTitle("Compile Presets");
+        toolPresetsFrame.setVisible(true);
+        toolPresetsFrame.setAutoRequestFocus(true);
+    }
+
+    public static void openToolBuildProggramsDialoga(){
+        toolPresetsFrame.setContentPane(toolBuildPrograms_gui.getjPanel());
+        toolPresetsFrame.setTitle("Build Programs");
+        toolPresetsFrame.setVisible(true);
+        toolPresetsFrame.setAutoRequestFocus(true);
+    }
+
+    public static void openSavePresetDialog(){
+        savePresetFrame.setContentPane(savePreset_gui.getMainPanel());
+        savePresetFrame.setVisible(true);
+        savePresetFrame.setEnabled(true);
+        savePresetFrame.setAutoRequestFocus(true);
+        savePreset_gui.getSavePanel().setVisible(true);
+        savePreset_gui.getOverwrirePanel().setVisible(false);
+        savePreset_gui.getSaveButton().setVisible(true);
+        savePreset_gui.getSaveCancelButton().setVisible(true);
+    }
+
+    public static void openOverwritePresetDialog(){
+        savePresetFrame.setContentPane(savePreset_gui.getMainPanel());
+        savePresetFrame.setVisible(true);
+        savePresetFrame.setEnabled(true);
+        savePresetFrame.setAutoRequestFocus(true);
+        savePreset_gui.getSavePanel().setVisible(false);
+        savePreset_gui.getOverwrirePanel().setVisible(true);
+        savePreset_gui.getSaveButton().setVisible(false);
+        savePreset_gui.getSaveCancelButton().setVisible(false);
+    }
+
     public static void main(String[] args) {
 
         BuildProgramManager.load();
@@ -91,15 +128,12 @@ public class HCR {
         savePresetFrame.setLocationRelativeTo(null);
         savePresetFrame.setResizable(false);
 
-        toolPresetsFrame.setContentPane(toolPresets_gui.getjPanel());
         toolPresetsFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         toolPresetsFrame.pack();
         toolPresetsFrame.setVisible(false);
         toolPresetsFrame.setSize(700,400);
-        toolPresetsFrame.setTitle("Compile Presets");
         toolPresetsFrame.setLocationRelativeTo(null);
         toolPresetsFrame.setResizable(false);
-
 
         ConsoleCommander.sendInfo("HCR " +buildNumber+" started successfully.");
 
@@ -126,7 +160,6 @@ public class HCR {
                     gameDir = args[2];
                     selectedBuildSettings = args[3];
                     autostart = Boolean.valueOf(args[4]);
-                    autoclose = Boolean.valueOf(args[3]);
                     break;
                 default:
                     vmfPath = args[0];
@@ -151,6 +184,7 @@ public class HCR {
                     }
 
                     CompileThread compileThread = new CompileThread(new CompileSet(vmfPath + "\\" + vmfFile,BuildSettingsManager.getBuildSetting(selectedBuildSettings)));
+                    hcr_gui.setCompileThread(compileThread);
                     compileThread.start();
                     new CompilerLogSyncThread(compileThread.getLog()).start();
 
@@ -169,34 +203,5 @@ public class HCR {
                 }
             }
         }
-
-        /*
-        BuildProgram vvis1 = new BuildProgram("vvis_0","VVIS 1","Das erste VVIS","E:\\Steam\\SteamApps\\common\\Counter-Strike Global Offensive\\bin\\vvis.exe",BuildProgramType.VVIS);
-        BuildProgram vrad1 = new BuildProgram("vrad_0","VRAD 1","","E:\\Steam\\SteamApps\\common\\Counter-Strike Global Offensive\\bin\\vrad_1.34.9.4\\bin\\vrad.exe",BuildProgramType.VRAD);
-        BuildProgram vbsp1 = new BuildProgram("vbsp_0","VBSP 1","Der erste VBSP Versuch","E:\\Steam\\SteamApps\\common\\Counter-Strike Global Offensive\\bin\\vbsp.exe",BuildProgramType.VBSP);
-
-        BuildProgramManager.addBuildProgram(vvis1);
-        BuildProgramManager.addBuildProgram(vrad1);
-        BuildProgramManager.addBuildProgram(vbsp1);
-        BuildProgramManager.save();
-
-        VBSPSettings vbspSettings = new VBSPSettings(false,false,false,false,false,false,false,null,"E:\\Steam\\SteamApps\\common\\Counter-Strike Global Offensive\\csgo",null,false,4,false,false,false,false,false,false,false,false,false
-                ,false,null,false,false,false,false,null,null,null,null,null,null,false,false,null,false,false,false,false,false);
-        VVISSettings vvisSettings = new VVISSettings(true,null,false,false,false,false,4,false,false,false,null,null,"E:\\Steam\\SteamApps\\common\\Counter-Strike Global Offensive\\csgo");
-        VRADSettings vradSettings = new VRADSettings(true,false,false,true,false,null,null,null,null,null,null,false,false,false,false,4,false,null,false,null,null,false,null,null,false,null,"E:\\Steam\\SteamApps\\common\\Counter-Strike Global Offensive\\csgo",false,false,
-                false,false,false,false,false,false,false,false,false,null,false,false,false,false,false);
-        BuildSettings buildSettings = new BuildSettings(vradSettings,vbspSettings,vvisSettings,vbsp1,vvis1,vrad1,"bs_0","Test Nummer ONE","Der aller erste Test!");
-
-        BuildSettingsManager.addBuildSetting("test_1",buildSettings);
-
-        File vmfPath = new File("E:\\Steam\\SteamApps\\common\\Counter-Strike Global Offensive\\sdk_content\\maps\\de_bottlestreet_pre_alpha_b009.vmf");
-
-        CompileSet compileSet = new CompileSet(vmfPath.getPath(),buildSettings,vbsp1,vvis1,vrad1);
-        CompileQueueManager.addCompileToQueue(compileSet);
-        CompileQueueManager.addCompileToQueue(compileSet);
-        CompileQueueManager.runCompiles();
-
-        BuildSettingsManager.load();
-        */
     }
 }

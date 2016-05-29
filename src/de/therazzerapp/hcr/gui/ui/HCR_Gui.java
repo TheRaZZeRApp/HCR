@@ -127,9 +127,9 @@ public class HCR_Gui{
     private JTextField vvisMPIPW;
     private JCheckBox vvisGameCheckBox;
     private JSpinner vvisThreadsSpinner;
-    private JRadioButton VBSPRadioButton;
-    private JRadioButton VVISRadioButton;
-    private JRadioButton VRADRadioButton;
+    private JRadioButton vbspRadioButton;
+    private JRadioButton vvisRadioButton;
+    private JRadioButton vradRadioButton;
     private JPanel vradPane;
     private JTextField vradGameField;
     private JCheckBox vradThreadCheckBox;
@@ -200,32 +200,29 @@ public class HCR_Gui{
 
     private boolean pauseToggle = false;
 
-    private BuildProgram selectedVrad;
-    private BuildProgram selectedVbsp;
-    private BuildProgram selectedVvis;
-
     private CompileThread compileThread;
     private String lastSelectedVMF;
 
     private JFileChooser openVMFDialog = new JFileChooser();
     private JFileChooser openRadDialog = new JFileChooser();
 
-    public void reloadBuildSettingsChooser(){
-        buildSettingsChooser.removeAllItems();
-        String unselectedBuildPreset = "<Unsaved Preset>";
-        buildSettingsChooser.addItem(unselectedBuildPreset);
-        for(BuildSettings buildSettings : BuildSettingsManager.getBuildSettings()){
-            buildSettingsChooser.addItem(buildSettings.getDisplayName());
-        }
-
-        if(buildSettingsChooser.getItemCount() > 0){
-            buildSettingsChooser.removeItemAt(0);
-            applyBuildSettings(BuildSettingsManager.getBuildSetting(buildSettingsChooser.getSelectedIndex()));
-            buildSettingsChooser.setToolTipText(BuildSettingsManager.getBuildSetting(buildSettingsChooser.getSelectedIndex()).getComment());
-        }
+    public void setCompileThread(CompileThread compileThread) {
+        this.compileThread = compileThread;
     }
 
+    public void addCompilePresetToList(BuildSettings buildSettings){
+        buildSettingsChooser.addItem(buildSettings);
+    }
+
+    public void removeCompilePresetFromList(BuildSettings buildSettings){
+        buildSettingsChooser.removeItem(buildSettings);
+    }
+
+
+
     public HCR_Gui(JFrame jFrame) {
+
+
 
         welcomePane.setEnabled(false);
         welcomePane.setVisible(false);
@@ -243,25 +240,33 @@ public class HCR_Gui{
         BuildSettingsManager.load();
         CompileQueueManager.load();
 
+        String unselectedBuildPreset = "<Unsaved Preset>";
+        buildSettingsChooser.addItem(unselectedBuildPreset);
+
+
+        for(BuildSettings buildSettings : BuildSettingsManager.getBuildSettings()){
+            buildSettingsChooser.addItem(buildSettings);
+        }
+
+        if(buildSettingsChooser.getItemCount() > 0){
+            buildSettingsChooser.removeItemAt(0);
+            applyBuildSettings((BuildSettings) buildSettingsChooser.getSelectedItem());
+            buildSettingsChooser.setToolTipText(((BuildSettings) buildSettingsChooser.getSelectedItem()).getComment());
+        }
+
         for(BuildProgram buildProgram : BuildProgramManager.getBuildProgramms()){
             switch (buildProgram.getBuildProgramType()){
                 case VBSP:
-                    vbspChooser.addItem(buildProgram.getDisplayName());
+                    vbspChooser.addItem(buildProgram);
                     break;
                 case VVIS:
-                    vvisChooser.addItem(buildProgram.getDisplayName());
+                    vvisChooser.addItem(buildProgram);
                     break;
                 case VRAD:
-                    vradChooser.addItem(buildProgram.getDisplayName());
+                    vradChooser.addItem(buildProgram);
                     break;
             }
         }
-
-        selectedVbsp = BuildProgramManager.getByTypeIndex(vbspChooser.getSelectedIndex(),BuildProgramType.VBSP);
-        selectedVvis = BuildProgramManager.getByTypeIndex(vvisChooser.getSelectedIndex(),BuildProgramType.VVIS);
-        selectedVrad = BuildProgramManager.getByTypeIndex(vradChooser.getSelectedIndex(),BuildProgramType.VRAD);
-
-        reloadBuildSettingsChooser();
 
         addListener(jFrame);
 
@@ -286,55 +291,27 @@ public class HCR_Gui{
         compileOutputScrollPane.getViewport().setAutoscrolls(true);
     }
 
-    private void openToolPresetDialoga(){
-        HCR.toolPresetsFrame.setVisible(true);
-        HCR.toolPresetsFrame.setAutoRequestFocus(true);
-    }
-
     private void addListener(JFrame jFrame){
 
         editPresetsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                openToolPresetDialoga();
+                HCR.openToolPresetDialoga();
             }
         });
 
         savePresetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                HCR.savePresetFrame.setVisible(true);
-                HCR.savePresetFrame.setEnabled(true);
-                HCR.savePresetFrame.setAutoRequestFocus(true);
+                HCR.openSavePresetDialog();
             }
         });
 
         buildSettingsChooser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                applyBuildSettings(BuildSettingsManager.getBuildSetting(buildSettingsChooser.getSelectedIndex()));
-                buildSettingsChooser.setToolTipText(BuildSettingsManager.getBuildSetting(buildSettingsChooser.getSelectedIndex()).getComment() != null ? BuildSettingsManager.getBuildSetting(buildSettingsChooser.getSelectedIndex()).getComment(): "");
-            }
-        });
-
-        vbspChooser.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                selectedVbsp = BuildProgramManager.getByTypeIndex(vbspChooser.getSelectedIndex(),BuildProgramType.VBSP);
-            }
-        });
-
-        vvisChooser.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                selectedVvis = BuildProgramManager.getByTypeIndex(vvisChooser.getSelectedIndex(),BuildProgramType.VVIS);
-            }
-        });
-
-        vradChooser.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                selectedVrad = BuildProgramManager.getByTypeIndex(vradChooser.getSelectedIndex(),BuildProgramType.VRAD);
+                applyBuildSettings((BuildSettings)buildSettingsChooser.getSelectedItem());
+                buildSettingsChooser.setToolTipText(((BuildSettings)buildSettingsChooser.getSelectedItem()).getComment() != null ? ((BuildSettings)buildSettingsChooser.getSelectedItem()).getComment() : "");
             }
         });
 
@@ -388,9 +365,9 @@ public class HCR_Gui{
                             getVradSettings(),
                             getVBSPSettings(),
                             getVvisSettings(),
-                            selectedVbsp,
-                            selectedVvis,
-                            selectedVrad,
+                            vbspChooser.isEnabled() ? (BuildProgram) vbspChooser.getSelectedItem() : null,
+                            vvisChooser.isEnabled() ? (BuildProgram) vvisChooser.getSelectedItem() : null,
+                            vradChooser.isEnabled() ? (BuildProgram) vradChooser.getSelectedItem() : null,
                             null,
                             null,
                             null
@@ -452,6 +429,39 @@ public class HCR_Gui{
             @Override
             public void mouseExited(MouseEvent e) {
 
+            }
+        });
+
+        vbspRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(vbspRadioButton.isSelected()){
+                    vbspChooser.setEnabled(true);
+                } else {
+                    vbspChooser.setEnabled(false);
+                }
+            }
+        });
+
+        vvisRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (vvisRadioButton.isSelected()){
+                    vvisChooser.setEnabled(true);
+                } else {
+                    vvisChooser.setEnabled(false);
+                }
+            }
+        });
+
+        vradRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (vradRadioButton.isSelected()){
+                    vradChooser.setEnabled(true);
+                } else {
+                    vradChooser.setEnabled(false);
+                }
             }
         });
     }
@@ -575,9 +585,20 @@ public class HCR_Gui{
     }
 
     private void applyBuildSettings(BuildSettings buildSettings){
-        vbspChooser.setSelectedItem(buildSettings.getVbsp().getDisplayName());
-        vvisChooser.setSelectedItem(buildSettings.getVvis().getDisplayName());
-        vradChooser.setSelectedItem(buildSettings.getVrad().getDisplayName());
+
+        if (buildSettings.getVbsp() != null){
+            vbspRadioButton.setSelected(true);
+            vbspChooser.setSelectedItem(buildSettings.getVbsp());
+        }
+        if(buildSettings.getVvis() != null){
+            vvisChooser.setSelectedItem(buildSettings.getVvis());
+            vvisRadioButton.setSelected(true);
+        }
+        if(buildSettings.getVrad() != null){
+            vradChooser.setSelectedItem(buildSettings.getVrad());
+            vradRadioButton.setSelected(true);
+        }
+
 
         //vbsp
         vbspverboseCheckBox.setSelected(buildSettings.getVbspSettings().isVerbose());
@@ -774,6 +795,25 @@ public class HCR_Gui{
         }
 
         //vrad
+        vradldrCheckBox.setSelected(buildSettings.getVradSettings().isLdr());
+        vradhdrCheckBox.setSelected(buildSettings.getVradSettings().isHdr());
+        vradbothCheckBox.setSelected(buildSettings.getVradSettings().isBoth());
+        vradfastCheckBox.setSelected(buildSettings.getVradSettings().isFast());
+        vradfinalCheckBox.setSelected(buildSettings.getVradSettings().isFinalCompile());
+        vradstaticPropLightingCheckBox.setSelected(buildSettings.getVradSettings().isStaticPropLighting());
+        vradstaticPropPolysCheckBox.setSelected(buildSettings.getVradSettings().isStaticPropPolys());
+        vradtextureShadowsCheckBox.setSelected(buildSettings.getVradSettings().isTextureShadows());
+
+        if (buildSettings.getVradSettings().getStaticPropSampleScale() == null){
+            vradstaticPropSampleScaleCheckBox.setSelected(false);
+            vradStaticPropSampleScaleSpinner.setValue(0);
+            vradStaticPropSampleScaleSpinner.setEnabled(false);
+        } else {
+            vradstaticPropSampleScaleCheckBox.setSelected(true);
+            vradStaticPropSampleScaleSpinner.setValue(buildSettings.getVradSettings().getStaticPropSampleScale());
+            vradStaticPropSampleScaleSpinner.setEnabled(true);
+        }
+
         if(buildSettings.getVradSettings().getGame() == null){
             vradGameCheckBox.setSelected(false);
             vradGameField.setText("");
@@ -845,12 +885,21 @@ public class HCR_Gui{
         });
 
         JMenuItem compilePresets = new JMenuItem("Compile Presets");
+        JMenuItem buildPrograms = new JMenuItem("Build Programs");
         tools.add(compilePresets);
+        tools.add(buildPrograms);
 
         compilePresets.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                openToolPresetDialoga();
+                HCR.openToolPresetDialoga();
+            }
+        });
+
+        buildPrograms.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                HCR.openToolBuildProggramsDialoga();
             }
         });
 

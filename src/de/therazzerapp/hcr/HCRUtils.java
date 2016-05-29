@@ -12,12 +12,8 @@ public class HCRUtils {
     public static boolean deleteDirectory(File dir) {
 
         if (dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDirectory(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
+            for (File d : dir.listFiles()){
+                deleteDirectory(d);
             }
         }
         // The directory is now empty or this is a file so delete it

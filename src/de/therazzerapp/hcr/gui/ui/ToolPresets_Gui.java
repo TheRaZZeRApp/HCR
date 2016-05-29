@@ -1,5 +1,6 @@
 package de.therazzerapp.hcr.gui.ui;
 
+import de.therazzerapp.hcr.HCR;
 import de.therazzerapp.hcr.content.BuildSettings;
 import de.therazzerapp.hcr.gui.ConsoleCommander;
 import de.therazzerapp.hcr.managers.BuildSettingsManager;
@@ -11,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 
 /**
  * <description>
@@ -40,65 +40,87 @@ public class ToolPresets_Gui {
     private JLabel commentLabel;
     private DefaultListModel defaultListModel = new DefaultListModel();
 
-    private BuildSettings[] buildSettingses;
+    public void removePreset(BuildSettings buildSettings){
+        defaultListModel.removeElement(buildSettings);
+    }
+
+    public void addPreset(BuildSettings buildSettings){
+        defaultListModel.addElement(buildSettings);
+    }
 
     public ToolPresets_Gui(JFrame jFrame) {
         presetList.setModel(defaultListModel);
-        updatePresetList();
+        presetList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        for (BuildSettings buildSettings : BuildSettingsManager.getBuildSettings()) {
+            defaultListModel.addElement(buildSettings);
+        }
 
         if(defaultListModel.size() > 0){
             presetList.setSelectedIndex(0);
-            updateLabel(presetList.getSelectedIndex());
+            updateLabel((BuildSettings)presetList.getSelectedValue());
         }
 
         addListener();
-
-    }
-
-    public void updatePresetList(){
-        buildSettingses = new BuildSettings[BuildSettingsManager.getSize()];
-        int i = 0;
-        for (BuildSettings buildSettings : BuildSettingsManager.getBuildSettings()) {
-            defaultListModel.add(i,buildSettings.getDisplayName());
-            buildSettingses[i] = buildSettings;
-            i++;
-        }
-    }
-
-    private void updateLabel(int index){
-        nameLabel.setText(buildSettingses[index].getDisplayName() + " (" + buildSettingses[index].getName() + ")");
-        vbspLabel.setText(buildSettingses[index].getVbsp().getDisplayName() + " (" + buildSettingses[index].getVbsp().getPath() + ")");
-        vbspParameterLabel.setText("<html>" + buildSettingses[index].getVbspSettings().getParam(buildSettingses[index].getGameDir()).replace(" -","<br>-") + "</hmlt>");
-        vvisLabel.setText(buildSettingses[index].getVvis().getDisplayName() + " (" + buildSettingses[index].getVvis().getPath() + ")");
-        vvisParameterLabel.setText("<html>" + buildSettingses[index].getVvisSettings().getParam(buildSettingses[index].getGameDir()).replace(" -","<br>-") + "</hmlt>");
-        vradLabel.setText(buildSettingses[index].getVrad().getDisplayName() + " (" + buildSettingses[index].getVrad().getPath() + ")");
-        vradParameterLabel.setText("<html>" + buildSettingses[index].getVradSettings().getParam(buildSettingses[index].getGameDir()).replace(" -","<br>-") + "</hmlt>");
-        customGameDirLabel.setText(buildSettingses[index].getGameDir() == null ? "default" : buildSettingses[index].getGameDir());
-        commentArea.setText(buildSettingses[index].getComment() == null ? "" : buildSettingses[index].getComment());
     }
 
 
-
+    private void updateLabel(BuildSettings buildSettings){
+        nameLabel.setText(buildSettings.getDisplayName() + " (" + buildSettings.getName() + ")");
+        vbspLabel.setText(buildSettings.getVbsp().getDisplayName() + " (" + buildSettings.getVbsp().getPath() + ")");
+        vbspParameterLabel.setText("<html>" + buildSettings.getVbspSettings().getParam(buildSettings.getGameDir()).replace(" -","<br>-") + "</hmlt>");
+        vvisLabel.setText(buildSettings.getVvis().getDisplayName() + " (" + buildSettings.getVvis().getPath() + ")");
+        vvisParameterLabel.setText("<html>" + buildSettings.getVvisSettings().getParam(buildSettings.getGameDir()).replace(" -","<br>-") + "</hmlt>");
+        vradLabel.setText(buildSettings.getVrad().getDisplayName() + " (" + buildSettings.getVrad().getPath() + ")");
+        vradParameterLabel.setText("<html>" + buildSettings.getVradSettings().getParam(buildSettings.getGameDir()).replace(" -","<br>-") + "</hmlt>");
+        customGameDirLabel.setText(buildSettings.getGameDir() == null ? "default" : buildSettings.getGameDir());
+        commentArea.setText(buildSettings.getComment() == null ? "" : buildSettings.getComment());
+    }
     private void addListener(){
 
-        presetList.addListSelectionListener(new ListSelectionListener() {
+        addButton.addActionListener(new ActionListener() {
             @Override
-            public void valueChanged(ListSelectionEvent e) {
+            public void actionPerformed(ActionEvent e) {
+                HCR.savePresetFrame.setVisible(true);
+                HCR.savePresetFrame.setEnabled(true);
+                HCR.savePresetFrame.toFront();
+            }
+        });
 
-                updateLabel(presetList.getSelectedIndex());
+        presetList.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                updateLabel((BuildSettings)presetList.getSelectedValue());
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
             }
         });
 
         removeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(buildSettingses[presetList.getSelectedIndex()] != null){
-                    BuildSettingsManager.removeBuildSetting(buildSettingses[presetList.getSelectedIndex()].getName());
-                    ConsoleCommander.sendInfo("Compile preset removed: " + buildSettingses[presetList.getSelectedIndex()].getDisplayName() + " ("  + buildSettingses[presetList.getSelectedIndex()].getName() + ")");
-                    BuildSettingsManager.load();
-                    updatePresetList();
-                    presetList.setSelectedIndex(0);
-                }
+                BuildSettingsManager.removeBuildSetting(((BuildSettings)presetList.getSelectedValue()).getName());
+                HCR.hcr_gui.removeCompilePresetFromList((BuildSettings)presetList.getSelectedValue());
+                ConsoleCommander.sendInfo("Compile preset removed: " + ((BuildSettings)presetList.getSelectedValue()).getDisplayName() + " ("  + ((BuildSettings)presetList.getSelectedValue()).getName() + ")");
+                defaultListModel.removeElement((BuildSettings)presetList.getSelectedValue());
             }
         });
     }

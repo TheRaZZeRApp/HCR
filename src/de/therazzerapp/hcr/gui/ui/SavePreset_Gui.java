@@ -2,7 +2,6 @@ package de.therazzerapp.hcr.gui.ui;
 
 import de.therazzerapp.hcr.HCR;
 import de.therazzerapp.hcr.content.BuildProgram;
-import de.therazzerapp.hcr.content.BuildProgramType;
 import de.therazzerapp.hcr.content.BuildSettings;
 import de.therazzerapp.hcr.gui.ConsoleCommander;
 import de.therazzerapp.hcr.managers.BuildProgramManager;
@@ -34,6 +33,22 @@ public class SavePreset_Gui {
     private JButton overwriteButton;
     private JLabel errorLabel;
 
+    public JPanel getOverwrirePanel() {
+        return overwrirePanel;
+    }
+
+    public JPanel getSavePanel() {
+        return savePanel;
+    }
+
+    public JButton getSaveCancelButton() {
+        return saveCancelButton;
+    }
+
+    public JButton getSaveButton() {
+        return saveButton;
+    }
+
     public SavePreset_Gui(JFrame jFrame) {
         overwrirePanel.setEnabled(false);
         overwrirePanel.setVisible(false);
@@ -43,20 +58,20 @@ public class SavePreset_Gui {
         for(BuildProgram buildProgram : BuildProgramManager.getBuildProgramms()){
             switch (buildProgram.getBuildProgramType()){
                 case VBSP:
-                    vbspBox.addItem(buildProgram.getDisplayName());
+                    vbspBox.addItem(buildProgram);
                     break;
                 case VVIS:
-                    vvisBox.addItem(buildProgram.getDisplayName());
+                    vvisBox.addItem(buildProgram);
                     break;
                 case VRAD:
-                    vradBox.addItem(buildProgram.getDisplayName());
+                    vradBox.addItem(buildProgram);
                     break;
             }
         }
 
-        vbspBox.setSelectedIndex(HCR.hcr_gui.getVbspChooser().getSelectedIndex());
-        vvisBox.setSelectedIndex(HCR.hcr_gui.getVbspChooser().getSelectedIndex());
-        vradBox.setSelectedIndex(HCR.hcr_gui.getVradChooser().getSelectedIndex());
+        vbspBox.setSelectedItem(HCR.hcr_gui.getVbspChooser().getSelectedItem());
+        vvisBox.setSelectedItem(HCR.hcr_gui.getVbspChooser().getSelectedItem());
+        vradBox.setSelectedItem(HCR.hcr_gui.getVradChooser().getSelectedItem());
 
     }
 
@@ -90,56 +105,57 @@ public class SavePreset_Gui {
                     return;
                 }
 
-                if(BuildSettingsManager.containsBuildSettingsByDisplayName(displayNameField.getText()) && !BuildSettingsManager.containsBuildSettings(nameField.getText())){
-                    errorLabel.setText("Name already taken.");
-                    return;
-                }
-
                 if(BuildSettingsManager.containsBuildSettings(nameField.getText())){
-                    savePanel.setVisible(false);
-                    overwrirePanel.setVisible(true);
-                    saveButton.setVisible(false);
-                    saveCancelButton.setVisible(false);
+                    HCR.openOverwritePresetDialog();
                     return;
                 }
 
-                BuildSettingsManager.addBuildSetting(nameField.getName(),new BuildSettings(
+                BuildSettings buildSettings = new BuildSettings(
                         HCR.hcr_gui.getVradSettings(),
                         HCR.hcr_gui.getVBSPSettings(),
                         HCR.hcr_gui.getVvisSettings(),
-                        BuildProgramManager.getByTypeIndex(vbspBox.getSelectedIndex(), BuildProgramType.VBSP),
-                        BuildProgramManager.getByTypeIndex(vvisBox.getSelectedIndex(), BuildProgramType.VVIS),
-                        BuildProgramManager.getByTypeIndex(vradBox.getSelectedIndex(), BuildProgramType.VRAD),
+                        (BuildProgram) vbspBox.getSelectedItem(),
+                        (BuildProgram) vvisBox.getSelectedItem(),
+                        (BuildProgram) vradBox.getSelectedItem(),
                         nameField.getText(),
                         displayNameField.getText(),
                         commentArea.getText()
-                ));
+                );
+
+                BuildSettingsManager.addBuildSetting(nameField.getName(),buildSettings);
                 ConsoleCommander.sendInfo("Added compile preset: " + displayNameField.getText() + " (" + nameField.getText() + ")");
-                reset();
-                HCR.hcr_gui.reloadBuildSettingsChooser();
+                HCR.hcr_gui.addCompilePresetToList(buildSettings);
+                HCR.toolPresets_gui.addPreset(buildSettings);
                 HCR.savePresetFrame.setVisible(false);
+                reset();
             }
         });
 
         overwriteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BuildSettingsManager.removeBuildSetting(nameField.getText());
-                BuildSettingsManager.addBuildSetting(nameField.getName(),new BuildSettings(
+                BuildSettings buildSettings = new BuildSettings(
                         HCR.hcr_gui.getVradSettings(),
                         HCR.hcr_gui.getVBSPSettings(),
                         HCR.hcr_gui.getVvisSettings(),
-                        BuildProgramManager.getByTypeIndex(vbspBox.getSelectedIndex(), BuildProgramType.VBSP),
-                        BuildProgramManager.getByTypeIndex(vvisBox.getSelectedIndex(), BuildProgramType.VVIS),
-                        BuildProgramManager.getByTypeIndex(vradBox.getSelectedIndex(), BuildProgramType.VRAD),
+                        (BuildProgram) vbspBox.getSelectedItem(),
+                        (BuildProgram) vvisBox.getSelectedItem(),
+                        (BuildProgram) vradBox.getSelectedItem(),
                         nameField.getText(),
                         displayNameField.getText(),
                         commentArea.getText()
-                ));
+                );
+
+                HCR.hcr_gui.removeCompilePresetFromList(BuildSettingsManager.getBuildSetting(nameField.getText()));
+                HCR.toolPresets_gui.removePreset(BuildSettingsManager.getBuildSetting(nameField.getText()));
+                BuildSettingsManager.removeBuildSetting(nameField.getText());
+
+                BuildSettingsManager.addBuildSetting(nameField.getText(),buildSettings);
                 ConsoleCommander.sendInfo("Overwrite compile preset: " + displayNameField.getText() + " (" + nameField.getText() + ")");
-                reset();
-                HCR.hcr_gui.reloadBuildSettingsChooser();
+                HCR.hcr_gui.addCompilePresetToList(buildSettings);
+                HCR.toolPresets_gui.addPreset(buildSettings);
                 HCR.savePresetFrame.setVisible(false);
+                reset();
             }
         });
 

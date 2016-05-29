@@ -19,10 +19,15 @@ import java.util.Map;
 public class BuildSettingsSaver {
 
     public static void rename(BuildSettings buildSettings, String newDisplayName){
-        File directory = new File("./content/buildSettings/" + buildSettings.getName() + "/config.jason");
+        File file = new File("./content/buildSettings/" + buildSettings.getName() + "/config.jason");
         JSONConfig config = new JSONConfig();
         JSONConfigSection root = config.newRootSection();
         root.setString("name",newDisplayName);
+        root.setString("comment",buildSettings.getComment());
+        root.setString("vbsp",buildSettings.getVbsp() != null ? buildSettings.getVbsp().getName() : "null");
+        root.setString("vvis",buildSettings.getVvis() != null ? buildSettings.getVvis().getName() : "null");
+        root.setString("vrad",buildSettings.getVrad() != null ? buildSettings.getVrad().getName() : "null");
+        config.save(root,file);
     }
 
     public static void save(Map<String,BuildSettings> buildSettingsMap){
@@ -36,9 +41,9 @@ public class BuildSettingsSaver {
             JSONConfigSection root = config.newRootSection();
             root.setString("name",buildSettings.getDisplayName());
             root.setString("comment",buildSettings.getComment());
-            root.setString("vbsp",buildSettings.getVbsp().getName());
-            root.setString("vvis",buildSettings.getVvis().getName());
-            root.setString("vrad",buildSettings.getVrad().getName());
+            root.setString("vbsp",buildSettings.getVbsp() != null ? buildSettings.getVbsp().getName() : "null");
+            root.setString("vvis",buildSettings.getVvis() != null ? buildSettings.getVvis().getName() : "null");
+            root.setString("vrad",buildSettings.getVrad() != null ? buildSettings.getVrad().getName() : "null");
             config.save(root,file);
         }
     }

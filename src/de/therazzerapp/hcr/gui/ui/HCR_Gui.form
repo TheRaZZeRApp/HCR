@@ -76,7 +76,7 @@
                   <hspacer id="8e9c7">
                     <constraints/>
                   </hspacer>
-                  <component id="db7d6" class="javax.swing.JRadioButton" binding="VBSPRadioButton" default-binding="true">
+                  <component id="db7d6" class="javax.swing.JRadioButton" binding="vbspRadioButton">
                     <constraints/>
                     <properties>
                       <text value="VBSP:"/>
@@ -93,7 +93,7 @@
                     <constraints/>
                     <properties/>
                   </component>
-                  <component id="84c5d" class="javax.swing.JRadioButton" binding="VVISRadioButton" default-binding="true">
+                  <component id="84c5d" class="javax.swing.JRadioButton" binding="vvisRadioButton">
                     <constraints/>
                     <properties>
                       <text value="VVIS:"/>
@@ -110,7 +110,7 @@
                     <constraints/>
                     <properties/>
                   </component>
-                  <component id="940a3" class="javax.swing.JRadioButton" binding="VRADRadioButton" default-binding="true">
+                  <component id="940a3" class="javax.swing.JRadioButton" binding="vradRadioButton">
                     <constraints/>
                     <properties>
                       <text value="VRAD:"/>

@@ -18,6 +18,13 @@ public class CompilerLog {
 
     private List<Character> lastChars = new ArrayList<>();
 
+    private boolean finish = false;
+
+    public void finish(){
+        finish = true;
+        semaphore.release();
+    }
+
     public CompilerLog append(char c){
         synchronized (this) {
             log.append(c);
@@ -52,7 +59,7 @@ public class CompilerLog {
         synchronized (this) {
             List<Character> temp = lastChars;
             lastChars = new ArrayList<>();
-            return temp;
+            return temp.isEmpty() && finish ? null : temp;
         }
     }
 

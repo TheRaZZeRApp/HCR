@@ -30,57 +30,24 @@ public class BuildSettingsManager {
     }
 
     public static void addBuildSetting(String name, BuildSettings buildSettings){
-        buildSettingsMap.put(name,buildSettings);
+        buildSettingsMap.put(name.toLowerCase(),buildSettings);
         save();
         load();
     }
 
-    public static int getSize(){
-        return buildSettingsMap.size();
-    }
-
     public static void removeBuildSetting(String name){
-        HCRUtils.deleteDirectory(new File("./buildSettings/" + buildSettingsMap.get(name).getName()));
-        buildSettingsMap.remove(name);
+        HCRUtils.deleteDirectory(new File("./content/buildSettings/" + name));
+        buildSettingsMap.remove(name.toLowerCase());
         save();
         load();
     }
 
     public static BuildSettings getBuildSetting(String name){
-        return buildSettingsMap.get(name);
+        return buildSettingsMap.get(name.toLowerCase());
     }
 
     public static boolean containsBuildSettings(String name){
-        return buildSettingsMap.containsKey(name);
-    }
-
-    public static boolean containsBuildSettingsByDisplayName(String displayname){
-        for (BuildSettings buildSettings : buildSettingsMap.values()) {
-            if(buildSettings.getDisplayName().equals(displayname)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static BuildSettings getByDisplayName(String displayname){
-        for (BuildSettings buildSettings : buildSettingsMap.values()) {
-            if(buildSettings.getDisplayName().equals(displayname)){
-                return buildSettings;
-            }
-        }
-        return null;
-    }
-
-    public static BuildSettings getBuildSetting(int position){
-        int i = 0;
-        for (BuildSettings buildSettings : buildSettingsMap.values()) {
-            if (i == position){
-                return buildSettings;
-            }
-            i++;
-        }
-        return null;
+        return buildSettingsMap.containsKey(name.toLowerCase());
     }
 
     public static Set<BuildSettings> getBuildSettings(){

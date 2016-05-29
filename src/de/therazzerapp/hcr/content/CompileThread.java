@@ -49,14 +49,18 @@ public class CompileThread extends Thread {
                                 br.close();
                             } catch (IOException e) {
                                 process.destroy();
+                                log.finish();
                                 return;
                             }
                         } catch (IOException e) {
                             //todo Error meldung
+                            log.finish();
                             return;
                         }
                     }
                 }
+
+        log.finish();
     }
 
     @Override

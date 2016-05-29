@@ -39,55 +39,9 @@ public class BuildProgramManager {
     }
 
     public static BuildProgram getBuildProgram(String name){
-        return buildProgramMap.get(name);
+        return buildProgramMap.get(name.toLowerCase());
     }
 
-    public static BuildProgram getByTypeIndex(int index, BuildProgramType type){
-        int a = 0;
-        int b = 0;
-        int c = 0;
-        for(BuildProgram buildProgram : BuildProgramManager.getBuildProgramms()){
-            switch (buildProgram.getBuildProgramType()){
-                case VBSP:
-                    if(a == index && type == BuildProgramType.VBSP){
-                        return buildProgram;
-                    }
-                    a++;
-                    break;
-                case VVIS:
-                    if(b == index && type == BuildProgramType.VVIS){
-                        return buildProgram;
-                    }
-                    b++;
-                    break;
-                case VRAD:
-                    if(c == index && type == BuildProgramType.VRAD){
-                        return buildProgram;
-                    }
-                    c++;
-                    break;
-            }
-        }
-        return null;
-    }
-
-    public static BuildProgram getByDisplayName(String displayName){
-        for (BuildProgram buildProgram : buildProgramMap.values()) {
-            if(buildProgram.getDisplayName().equals(displayName)){
-                return buildProgram;
-            }
-        }
-        return null;
-    }
-
-    public static BuildProgram getBuildProgram(int position){
-        int i = 0;
-        for (BuildProgram buildProgram : buildProgramMap.values()) {
-            if (i == position)
-                return buildProgram;
-        }
-        return null;
-    }
 
     public static Set<BuildProgram> getBuildProgramms(){
         Set<BuildProgram> buildPrograms = new HashSet<BuildProgram>();

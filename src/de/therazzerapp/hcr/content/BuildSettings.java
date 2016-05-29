@@ -92,4 +92,9 @@ public class BuildSettings {
     public void setGameDir(String gameDir) {
         this.gameDir = gameDir;
     }
+
+    @Override
+    public String toString() {
+        return displayName;
+    }
 }
