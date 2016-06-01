@@ -20,9 +20,16 @@ public class ContentObserver {
         contentUpdaterSet.remove(contentUpdater);
     }
 
-    public static void update(){
+    /**
+     *
+     * @param contentID
+     *          <br>-1 - All
+     *          <br> 0 - BuildSettings
+     *          <br> 1 - BuildProgram
+     */
+    public static void update(int contentID){
         for (ContentUpdater contentUpdater : contentUpdaterSet) {
-            contentUpdater.updateContent();
+            contentUpdater.updateContent(contentID);
         }
     }
 }

@@ -152,7 +152,7 @@ public class HCR {
         ContentObserver.addContentUser(saveProgram_gui);
         ContentObserver.addContentUser(toolBuildPrograms_gui);
         ContentObserver.addContentUser(toolPresets_gui);
-        ContentObserver.update();
+        ContentObserver.update(-1);
 
         ConsoleCommander.sendInfo("HCR " +buildNumber+" started successfully.");
 
@@ -188,6 +188,10 @@ public class HCR {
                     autostart = Boolean.valueOf(args[4]);
                     autoclose = Boolean.valueOf(args[5]);
                     break;
+            }
+
+            if(BuildSettingsManager.containsBuildSettings(selectedBuildSettings)){
+                hcr_gui.applyBuildSettings(BuildSettingsManager.getBuildSetting(selectedBuildSettings));
             }
 
             if(!BuildSettingsManager.containsBuildSettings(selectedBuildSettings)){

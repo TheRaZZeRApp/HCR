@@ -7,5 +7,13 @@ package de.therazzerapp.hcr.gui;
  * @since <version>
  */
 public interface ContentUpdater {
-    void updateContent();
+
+    /**
+     *
+     * @param contentID
+     *          <br>-1 - All
+     *          <br> 0 - BuildSettings
+     *          <br> 1 - BuildProgram
+     */
+    void updateContent(int contentID);
 }

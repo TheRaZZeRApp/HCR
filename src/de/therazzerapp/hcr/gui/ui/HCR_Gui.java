@@ -207,14 +207,6 @@ public class HCR_Gui implements ContentUpdater{
         this.compileThread = compileThread;
     }
 
-    public void addCompilePresetToList(BuildSettings buildSettings){
-        buildSettingsChooser.addItem(buildSettings);
-    }
-
-    public void removeCompilePresetFromList(BuildSettings buildSettings){
-        buildSettingsChooser.removeItem(buildSettings);
-    }
-
     private void addCheckListener(JCheckBox checkBox, JComponent component){
         checkBox.addActionListener(new ActionListener() {
             @Override
@@ -226,20 +218,6 @@ public class HCR_Gui implements ContentUpdater{
                 }
             }
         });
-    }
-
-    public void addBuildProgram(BuildProgram buildProgram){
-        switch (buildProgram.getBuildProgramType()){
-            case VBSP:
-                vbspChooser.addItem(buildProgram);
-                break;
-            case VVIS:
-                vvisChooser.addItem(buildProgram);
-                break;
-            case VRAD:
-                vradChooser.addItem(buildProgram);
-                break;
-        }
     }
 
     public HCR_Gui(JFrame jFrame) {
@@ -258,28 +236,6 @@ public class HCR_Gui implements ContentUpdater{
         */
 
 
-
-        BuildProgramManager.load();
-        BuildSettingsManager.load();
-        CompileQueueManager.load();
-
-
-        buildSettingsChooser.addItem(unselectedBuildPreset);
-
-
-        for(BuildSettings buildSettings : BuildSettingsManager.getBuildSettings()){
-            buildSettingsChooser.addItem(buildSettings);
-        }
-
-        if(buildSettingsChooser.getItemCount() > 1){
-            buildSettingsChooser.removeItemAt(0);
-            applyBuildSettings((BuildSettings) buildSettingsChooser.getSelectedItem());
-            buildSettingsChooser.setToolTipText(((BuildSettings) buildSettingsChooser.getSelectedItem()).getComment());
-        }
-
-        for(BuildProgram buildProgram : BuildProgramManager.getBuildProgramms()){
-            addBuildProgram(buildProgram);
-        }
 
         addListener(jFrame);
 
@@ -359,12 +315,10 @@ public class HCR_Gui implements ContentUpdater{
         buildSettingsChooser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (buildSettingsChooser.getComponentCount() > 1 && buildSettingsChooser.getItemAt(0).equals(unselectedBuildPreset)){
-                    buildSettingsChooser.setSelectedIndex(1);
-                    buildSettingsChooser.removeItem(unselectedBuildPreset);
+                if (buildSettingsChooser.getSelectedIndex() != -1 && !buildSettingsChooser.getSelectedItem().equals(unselectedBuildPreset) && buildSettingsChooser.getItemCount() > 0){
+                    buildSettingsChooser.setToolTipText(((BuildSettings)buildSettingsChooser.getSelectedItem()).getComment() != null ? ((BuildSettings)buildSettingsChooser.getSelectedItem()).getComment() : "");
+                    applyBuildSettings((BuildSettings)buildSettingsChooser.getSelectedItem());
                 }
-                applyBuildSettings((BuildSettings)buildSettingsChooser.getSelectedItem());
-                buildSettingsChooser.setToolTipText(((BuildSettings)buildSettingsChooser.getSelectedItem()).getComment() != null ? ((BuildSettings)buildSettingsChooser.getSelectedItem()).getComment() : "");
             }
         });
 
@@ -641,7 +595,7 @@ public class HCR_Gui implements ContentUpdater{
 
     }
 
-    private void applyBuildSettings(BuildSettings buildSettings){
+    public void applyBuildSettings(BuildSettings buildSettings){
 
         if (buildSettings == null){
             return;
@@ -946,7 +900,60 @@ public class HCR_Gui implements ContentUpdater{
     }
 
     @Override
-    public void updateContent() {
+    public void updateContent(int contetntID) {
 
+        if (contetntID == -1 || contetntID == 0){
+            buildSettingsChooser.setSelectedIndex(-1);
+            buildSettingsChooser.removeAllItems();
+
+            for (BuildSettings buildSettings : BuildSettingsManager.getBuildSettings()){
+                buildSettingsChooser.addItem(buildSettings);
+            }
+
+            if (buildSettingsChooser.getItemCount() > 0){
+                buildSettingsChooser.setSelectedIndex(0);
+                applyBuildSettings((BuildSettings) buildSettingsChooser.getSelectedItem());
+                buildSettingsChooser.setToolTipText(((BuildSettings) buildSettingsChooser.getSelectedItem()).getComment());
+            } else {
+                buildSettingsChooser.addItem(unselectedBuildPreset);
+                buildSettingsChooser.setSelectedIndex(0);
+            }
+        }
+
+        if (contetntID == -1 || contetntID == 1){
+            vradChooser.setSelectedIndex(-1);
+            vbspChooser.setSelectedIndex(-1);
+            vvisChooser.setSelectedIndex(-1);
+            vradChooser.removeAllItems();
+            vbspChooser.removeAllItems();
+            vvisChooser.removeAllItems();
+
+            for(BuildProgram buildProgram : BuildProgramManager.getBuildProgramms()){
+                switch (buildProgram.getBuildProgramType()){
+                    case VBSP:
+                        vbspChooser.addItem(buildProgram);
+                        break;
+                    case VVIS:
+                        vvisChooser.addItem(buildProgram);
+                        break;
+                    case VRAD:
+                        vradChooser.addItem(buildProgram);
+                        break;
+                }
+            }
+
+            if (vradChooser.getItemCount() > 0){
+                vradChooser.setSelectedIndex(0);
+                vradChooser.setToolTipText(((BuildProgram)vradChooser.getSelectedItem()).getComment());
+            }
+            if (vvisChooser.getItemCount() > 0){
+                vvisChooser.setSelectedIndex(0);
+                vvisChooser.setToolTipText(((BuildProgram)vradChooser.getSelectedItem()).getComment());
+            }
+            if (vbspChooser.getItemCount() > 0){
+                vbspChooser.setSelectedIndex(0);
+                vbspChooser.setToolTipText(((BuildProgram)vradChooser.getSelectedItem()).getComment());
+            }
+        }
     }
 }

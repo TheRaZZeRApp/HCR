@@ -32,13 +32,13 @@ public class BuildProgramManager {
     public static void addBuildProgram(BuildProgram buildProgram){
         buildProgramMap.put(buildProgram.getName().toLowerCase(),buildProgram);
         save();
-        ContentObserver.update();
+        ContentObserver.update(1);
     }
 
     public static void removeBuildProgram(BuildProgram buildProgram){
         buildProgramMap.remove(buildProgram.getName());
         save();
-        ContentObserver.update();
+        ContentObserver.update(1);
     }
 
     public static boolean containsBuildProgram(String name){

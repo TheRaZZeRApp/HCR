@@ -39,16 +39,7 @@ public class ToolPresets_Gui implements ContentUpdater{
     private JLabel commentLabel;
     private DefaultListModel defaultListModel = new DefaultListModel();
 
-    public void removePreset(BuildSettings buildSettings){
-        defaultListModel.removeElement(buildSettings);
-    }
-
-    public void addPreset(BuildSettings buildSettings){
-        defaultListModel.addElement(buildSettings);
-    }
-
     public ToolPresets_Gui(JFrame jFrame) {
-
         presetList.setModel(defaultListModel);
         presetList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         addListener();
@@ -109,8 +100,8 @@ public class ToolPresets_Gui implements ContentUpdater{
         removeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BuildSettingsManager.removeBuildSetting(((BuildSettings)presetList.getSelectedValue()).getName());
                 ConsoleCommander.sendInfo("Compile preset removed: " + ((BuildSettings)presetList.getSelectedValue()).getDisplayName() + " ("  + ((BuildSettings)presetList.getSelectedValue()).getName() + ")");
+                BuildSettingsManager.removeBuildSetting(((BuildSettings)presetList.getSelectedValue()).getName());
             }
         });
     }
@@ -120,18 +111,20 @@ public class ToolPresets_Gui implements ContentUpdater{
     }
 
     @Override
-    public void updateContent() {
-        presetList.setSelectedIndex(-1);
-        defaultListModel.removeAllElements();
-        presetList.removeAll();
+    public void updateContent(int contetnID) {
+        if (contetnID == -1 || contetnID == 0){
+            presetList.setSelectedIndex(-1);
+            defaultListModel.removeAllElements();
+            presetList.removeAll();
 
-        for (BuildSettings buildSettings : BuildSettingsManager.getBuildSettings()) {
-            defaultListModel.addElement(buildSettings);
-        }
+            for (BuildSettings buildSettings : BuildSettingsManager.getBuildSettings()) {
+                defaultListModel.addElement(buildSettings);
+            }
 
-        if(defaultListModel.size() > 0){
-            presetList.setSelectedIndex(0);
-            updateLabel((BuildSettings)presetList.getSelectedValue());
+            if(defaultListModel.size() > 0){
+                presetList.setSelectedIndex(0);
+                updateLabel((BuildSettings)presetList.getSelectedValue());
+            }
         }
     }
 }

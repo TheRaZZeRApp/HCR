@@ -157,21 +157,23 @@ public class SavePreset_Gui implements ContentUpdater{
     }
 
     @Override
-    public void updateContent() {
-        vbspBox.removeAllItems();
-        vradBox.removeAllItems();
-        vvisBox.removeAllItems();
-        for(BuildProgram buildProgram : BuildProgramManager.getBuildProgramms()){
-            switch (buildProgram.getBuildProgramType()){
-                case VBSP:
-                    vbspBox.addItem(buildProgram);
-                    break;
-                case VVIS:
-                    vvisBox.addItem(buildProgram);
-                    break;
-                case VRAD:
-                    vradBox.addItem(buildProgram);
-                    break;
+    public void updateContent(int contentID) {
+        if (contentID == -1 || contentID == 1){
+            vbspBox.removeAllItems();
+            vradBox.removeAllItems();
+            vvisBox.removeAllItems();
+            for(BuildProgram buildProgram : BuildProgramManager.getBuildProgramms()){
+                switch (buildProgram.getBuildProgramType()){
+                    case VBSP:
+                        vbspBox.addItem(buildProgram);
+                        break;
+                    case VVIS:
+                        vvisBox.addItem(buildProgram);
+                        break;
+                    case VRAD:
+                        vradBox.addItem(buildProgram);
+                        break;
+                }
             }
         }
     }

@@ -34,7 +34,7 @@ public class BuildSettingsManager {
         buildSettingsMap.put(buildSettings.getName().toLowerCase(),buildSettings);
         save();
         load();
-        ContentObserver.update();
+        ContentObserver.update(0);
     }
 
     public static void removeBuildSetting(String name){
@@ -42,7 +42,7 @@ public class BuildSettingsManager {
         buildSettingsMap.remove(name.toLowerCase());
         save();
         load();
-        ContentObserver.update();
+        ContentObserver.update(0);
     }
 
     public static BuildSettings getBuildSetting(String name){

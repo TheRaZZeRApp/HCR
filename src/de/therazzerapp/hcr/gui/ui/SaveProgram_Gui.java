@@ -175,7 +175,7 @@ public class SaveProgram_Gui implements ContentUpdater{
     }
 
     @Override
-    public void updateContent() {
+    public void updateContent(int contentID) {
 
     }
 }
