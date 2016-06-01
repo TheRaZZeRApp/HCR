@@ -5,6 +5,7 @@ import de.therazzerapp.hcr.content.BuildSettings;
 import de.therazzerapp.hcr.content.VBSPSettings;
 import de.therazzerapp.hcr.content.loader.BuildSettingsLoader;
 import de.therazzerapp.hcr.content.saver.BuildSettingsSaver;
+import de.therazzerapp.hcr.gui.ContentObserver;
 
 import java.io.File;
 import java.util.HashMap;
@@ -29,10 +30,11 @@ public class BuildSettingsManager {
         BuildSettingsSaver.save(buildSettingsMap);
     }
 
-    public static void addBuildSetting(String name, BuildSettings buildSettings){
-        buildSettingsMap.put(name.toLowerCase(),buildSettings);
+    public static void addBuildSetting(BuildSettings buildSettings){
+        buildSettingsMap.put(buildSettings.getName().toLowerCase(),buildSettings);
         save();
         load();
+        ContentObserver.update();
     }
 
     public static void removeBuildSetting(String name){
@@ -40,6 +42,7 @@ public class BuildSettingsManager {
         buildSettingsMap.remove(name.toLowerCase());
         save();
         load();
+        ContentObserver.update();
     }
 
     public static BuildSettings getBuildSetting(String name){

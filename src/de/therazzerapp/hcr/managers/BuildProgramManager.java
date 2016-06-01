@@ -5,6 +5,7 @@ import de.therazzerapp.hcr.content.BuildProgramType;
 import de.therazzerapp.hcr.content.BuildSettings;
 import de.therazzerapp.hcr.content.loader.BuildProgramLoader;
 import de.therazzerapp.hcr.content.saver.BuildProgramSaver;
+import de.therazzerapp.hcr.gui.ContentObserver;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,13 +30,19 @@ public class BuildProgramManager {
     }
 
     public static void addBuildProgram(BuildProgram buildProgram){
-        buildProgramMap.put(buildProgram.getName(),buildProgram);
+        buildProgramMap.put(buildProgram.getName().toLowerCase(),buildProgram);
         save();
+        ContentObserver.update();
     }
 
     public static void removeBuildProgram(BuildProgram buildProgram){
         buildProgramMap.remove(buildProgram.getName());
         save();
+        ContentObserver.update();
+    }
+
+    public static boolean containsBuildProgram(String name){
+        return buildProgramMap.containsKey(name.toLowerCase());
     }
 
     public static BuildProgram getBuildProgram(String name){

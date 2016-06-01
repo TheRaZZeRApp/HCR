@@ -1,7 +1,10 @@
 package de.therazzerapp.hcr.gui.ui;
 
+import de.therazzerapp.hcr.HCR;
 import de.therazzerapp.hcr.content.BuildProgram;
 import de.therazzerapp.hcr.content.BuildProgramType;
+import de.therazzerapp.hcr.gui.ContentUpdater;
+import de.therazzerapp.hcr.gui.GUIUtils;
 import de.therazzerapp.hcr.managers.BuildProgramManager;
 import de.therazzerapp.hcr.managers.BuildSettingsManager;
 import de.therazzerapp.hcr.managers.CompileQueueManager;
@@ -9,6 +12,8 @@ import de.therazzerapp.hcr.managers.CompileQueueManager;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -19,7 +24,7 @@ import java.util.ArrayList;
  * @author The RaZZeR App <rezzer101@googlemail.com; e-mail@therazzerapp.de>
  * @since <version>
  */
-public class ToolBuildPrograms_Gui {
+public class ToolBuildPrograms_Gui implements ContentUpdater{
     private JPanel jPanel;
     private JPanel programsPanel;
     private JPanel selectedProgramPanel;
@@ -45,7 +50,9 @@ public class ToolBuildPrograms_Gui {
         vradList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         vvisList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         vbspList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        updateList();
+        for (BuildProgram buildProgram : BuildProgramManager.getBuildProgramms()) {
+            addBuildProgramToChooser(buildProgram);
+        }
         if(vbspDefaultListModel.size() > 0){
             vbspList.setSelectedIndex(0);
             updateLabel((BuildProgram) vbspList.getSelectedValue());
@@ -66,24 +73,30 @@ public class ToolBuildPrograms_Gui {
         commentArea.setText(buildProgram.getComment());
     }
 
-    public void updateList(){
-        for (BuildProgram buildProgram : BuildProgramManager.getBuildProgramms()) {
-            switch (buildProgram.getBuildProgramType()){
-                case VBSP:
-                    vbspDefaultListModel.addElement(buildProgram);
-                    break;
-                case VVIS:
-                    vvisDefaultListModel.addElement(buildProgram);
-                    break;
-                case VRAD:
-                    vradDefaultListModel.addElement(buildProgram);
-                    break;
-            }
+    public void addBuildProgramToChooser(BuildProgram buildProgram){
+        switch (buildProgram.getBuildProgramType()){
+            case VBSP:
+                vbspDefaultListModel.addElement(buildProgram);
+                break;
+            case VVIS:
+                vvisDefaultListModel.addElement(buildProgram);
+                break;
+            case VRAD:
+                vradDefaultListModel.addElement(buildProgram);
+                break;
         }
-
     }
 
+
+
     private void addListener(){
+
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                HCR.openSaveProgramDialog();
+            }
+        });
 
         vbspList.addMouseListener(new MouseListener() {
             @Override
@@ -169,5 +182,10 @@ public class ToolBuildPrograms_Gui {
 
     public JPanel getjPanel() {
         return jPanel;
+    }
+
+    @Override
+    public void updateContent() {
+
     }
 }

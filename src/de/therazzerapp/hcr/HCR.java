@@ -5,10 +5,8 @@ import de.therazzerapp.hcr.content.CompileSet;
 import de.therazzerapp.hcr.content.CompileThread;
 import de.therazzerapp.hcr.gui.CompilerLogSyncThread;
 import de.therazzerapp.hcr.gui.ConsoleCommander;
-import de.therazzerapp.hcr.gui.ui.HCR_Gui;
-import de.therazzerapp.hcr.gui.ui.SavePreset_Gui;
-import de.therazzerapp.hcr.gui.ui.ToolBuildPrograms_Gui;
-import de.therazzerapp.hcr.gui.ui.ToolPresets_Gui;
+import de.therazzerapp.hcr.gui.ContentObserver;
+import de.therazzerapp.hcr.gui.ui.*;
 import de.therazzerapp.hcr.managers.BuildProgramManager;
 import de.therazzerapp.hcr.managers.BuildSettingsManager;
 import de.therazzerapp.hcr.managers.CompileQueueManager;
@@ -16,6 +14,8 @@ import de.therazzerapp.hcr.managers.CompileQueueManager;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.net.ConnectException;
+import java.net.URL;
 
 
 /**
@@ -43,12 +43,12 @@ public class HCR {
     public static final JFrame mainFrame = new JFrame("Hammer Compiler Replacement");
     public static final JFrame savePresetFrame = new JFrame("Save Compile Preset");
     public static final JFrame toolPresetsFrame = new JFrame("Presets");
-    public static final JFrame toolBuildProgramsFrame = new JFrame("Build Programs");
 
     public static final HCR_Gui hcr_gui = new HCR_Gui(mainFrame);
     public static final SavePreset_Gui savePreset_gui = new SavePreset_Gui(savePresetFrame);
+    public static final SaveProgram_Gui saveProgram_gui = new SaveProgram_Gui(savePresetFrame);
     public static final ToolPresets_Gui toolPresets_gui = new ToolPresets_Gui(toolPresetsFrame);
-    public static final ToolBuildPrograms_Gui toolBuildPrograms_gui = new ToolBuildPrograms_Gui(toolBuildProgramsFrame);
+    public static final ToolBuildPrograms_Gui toolBuildPrograms_gui = new ToolBuildPrograms_Gui(toolPresetsFrame);
 
     public static String getVmfPath() {
         return vmfPath;
@@ -81,15 +81,23 @@ public class HCR {
         toolPresetsFrame.setAutoRequestFocus(true);
     }
 
-    public static void openSavePresetDialog(){
-        savePresetFrame.setContentPane(savePreset_gui.getMainPanel());
+    private static void openSaveDialog(JPanel panel){
+        savePresetFrame.setContentPane(panel);
         savePresetFrame.setVisible(true);
         savePresetFrame.setEnabled(true);
         savePresetFrame.setAutoRequestFocus(true);
-        savePreset_gui.getSavePanel().setVisible(true);
-        savePreset_gui.getOverwrirePanel().setVisible(false);
-        savePreset_gui.getSaveButton().setVisible(true);
-        savePreset_gui.getSaveCancelButton().setVisible(true);
+        saveProgram_gui.getSavePanel().setVisible(true);
+        saveProgram_gui.getOverwrirePanel().setVisible(false);
+        saveProgram_gui.getSaveButton().setVisible(true);
+        saveProgram_gui.getSaveCancelButton().setVisible(true);
+    }
+
+    public static void openSaveProgramDialog(){
+        openSaveDialog(saveProgram_gui.getMainPanel());
+    }
+
+    public static void openSavePresetDialog(){
+        openSaveDialog(savePreset_gui.getMainPanel());
     }
 
     public static void openOverwritePresetDialog(){
@@ -109,6 +117,8 @@ public class HCR {
         BuildSettingsManager.load();
         CompileQueueManager.load();
 
+        URL resource1 = HCR.class.getResource( "images/icon_32.png" );
+        mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(resource1));
         mainFrame.setContentPane(hcr_gui.getjPanel());
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.pack();
@@ -119,6 +129,7 @@ public class HCR {
         mainFrame.setMinimumSize(new Dimension(900,550));
         mainFrame.setResizable(false);
 
+        savePresetFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(resource1));
         savePresetFrame.setContentPane(savePreset_gui.getMainPanel());
         savePresetFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         savePresetFrame.pack();
@@ -128,12 +139,20 @@ public class HCR {
         savePresetFrame.setLocationRelativeTo(null);
         savePresetFrame.setResizable(false);
 
+        toolPresetsFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(resource1));
         toolPresetsFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         toolPresetsFrame.pack();
         toolPresetsFrame.setVisible(false);
         toolPresetsFrame.setSize(700,400);
         toolPresetsFrame.setLocationRelativeTo(null);
         toolPresetsFrame.setResizable(false);
+
+        ContentObserver.addContentUser(hcr_gui);
+        ContentObserver.addContentUser(savePreset_gui);
+        ContentObserver.addContentUser(saveProgram_gui);
+        ContentObserver.addContentUser(toolBuildPrograms_gui);
+        ContentObserver.addContentUser(toolPresets_gui);
+        ContentObserver.update();
 
         ConsoleCommander.sendInfo("HCR " +buildNumber+" started successfully.");
 

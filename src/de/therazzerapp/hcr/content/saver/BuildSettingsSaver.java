@@ -19,7 +19,7 @@ import java.util.Map;
 public class BuildSettingsSaver {
 
     public static void rename(BuildSettings buildSettings, String newDisplayName){
-        File file = new File("./content/buildSettings/" + buildSettings.getName() + "/config.jason");
+        File file = new File("./content/buildSettings/" + buildSettings.getName() + "/config.json");
         JSONConfig config = new JSONConfig();
         JSONConfigSection root = config.newRootSection();
         root.setString("name",newDisplayName);

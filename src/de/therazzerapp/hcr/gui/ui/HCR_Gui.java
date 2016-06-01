@@ -6,20 +6,17 @@ import de.therazzerapp.hcr.filter.RadFileFilter;
 import de.therazzerapp.hcr.filter.VMFFileFilter;
 import de.therazzerapp.hcr.gui.CompilerLogSyncThread;
 import de.therazzerapp.hcr.gui.ConsoleCommander;
+import de.therazzerapp.hcr.gui.ContentUpdater;
 import de.therazzerapp.hcr.managers.BuildProgramManager;
 import de.therazzerapp.hcr.managers.BuildSettingsManager;
 import de.therazzerapp.hcr.managers.CompileQueueManager;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.text.DefaultCaret;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 
 /**
  * <description>
@@ -27,7 +24,7 @@ import java.io.File;
  * @author The RaZZeR App <rezzer101@googlemail.com; e-mail@therazzerapp.de>
  * @since <version>
  */
-public class HCR_Gui{
+public class HCR_Gui implements ContentUpdater{
     private JPanel jPanel;
     private JButton welcomeChooseVMFButton;
     private JPanel mainPanel;
@@ -196,8 +193,6 @@ public class HCR_Gui{
     private JCheckBox shutDownAfterCompileCheckBox;
     private JTextPane compileOutputAnalysisTextPane;
 
-
-
     private boolean pauseToggle = false;
 
     private CompileThread compileThread;
@@ -205,6 +200,8 @@ public class HCR_Gui{
 
     private JFileChooser openVMFDialog = new JFileChooser();
     private JFileChooser openRadDialog = new JFileChooser();
+
+    private String unselectedBuildPreset = "<Unsaved Preset>";
 
     public void setCompileThread(CompileThread compileThread) {
         this.compileThread = compileThread;
@@ -218,10 +215,34 @@ public class HCR_Gui{
         buildSettingsChooser.removeItem(buildSettings);
     }
 
+    private void addCheckListener(JCheckBox checkBox, JComponent component){
+        checkBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(checkBox.isSelected()){
+                    component.setEnabled(true);
+                } else {
+                    component.setEnabled(false);
+                }
+            }
+        });
+    }
 
+    public void addBuildProgram(BuildProgram buildProgram){
+        switch (buildProgram.getBuildProgramType()){
+            case VBSP:
+                vbspChooser.addItem(buildProgram);
+                break;
+            case VVIS:
+                vvisChooser.addItem(buildProgram);
+                break;
+            case VRAD:
+                vradChooser.addItem(buildProgram);
+                break;
+        }
+    }
 
     public HCR_Gui(JFrame jFrame) {
-
 
 
         welcomePane.setEnabled(false);
@@ -236,11 +257,13 @@ public class HCR_Gui{
         }
         */
 
+
+
         BuildProgramManager.load();
         BuildSettingsManager.load();
         CompileQueueManager.load();
 
-        String unselectedBuildPreset = "<Unsaved Preset>";
+
         buildSettingsChooser.addItem(unselectedBuildPreset);
 
 
@@ -248,24 +271,14 @@ public class HCR_Gui{
             buildSettingsChooser.addItem(buildSettings);
         }
 
-        if(buildSettingsChooser.getItemCount() > 0){
+        if(buildSettingsChooser.getItemCount() > 1){
             buildSettingsChooser.removeItemAt(0);
             applyBuildSettings((BuildSettings) buildSettingsChooser.getSelectedItem());
             buildSettingsChooser.setToolTipText(((BuildSettings) buildSettingsChooser.getSelectedItem()).getComment());
         }
 
         for(BuildProgram buildProgram : BuildProgramManager.getBuildProgramms()){
-            switch (buildProgram.getBuildProgramType()){
-                case VBSP:
-                    vbspChooser.addItem(buildProgram);
-                    break;
-                case VVIS:
-                    vvisChooser.addItem(buildProgram);
-                    break;
-                case VRAD:
-                    vradChooser.addItem(buildProgram);
-                    break;
-            }
+            addBuildProgram(buildProgram);
         }
 
         addListener(jFrame);
@@ -289,6 +302,42 @@ public class HCR_Gui{
         DefaultCaret caret = (DefaultCaret) compileOutputArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         compileOutputScrollPane.getViewport().setAutoscrolls(true);
+
+        //CheckBox Listener
+        addCheckListener(vbspGameCheckBox,vbspGameField);
+        addCheckListener(vbspthreadsCheckBox,vbspThreadsSpinner);
+        addCheckListener(vbspvProjectCheckBox,vbspVProjectField);
+        addCheckListener(vbspembedCheckBox,vbspEmbedField);
+        addCheckListener(vbspmicroCheckBox,vbspMicroField);
+        addCheckListener(vbspblockCheckBox,vbspBlock1);
+        addCheckListener(vbspblockCheckBox,vbspBlock2);
+        addCheckListener(vbspblocksCheckBox,vbspBlocks1);
+        addCheckListener(vbspblocksCheckBox,vbspBlocks2);
+        addCheckListener(vbspblocksCheckBox,vbspBlocks3);
+        addCheckListener(vbspblocksCheckBox,vbspBlocks4);
+        addCheckListener(vbspluxelScaleCheckBox,vbspLuxelScaleSpinner);
+
+        addCheckListener(vvisGameCheckBox,vvisGameField);
+        addCheckListener(vvisthreadsCheckBox,vvisThreadsSpinner);
+        addCheckListener(vvisradius_overrideCheckBox,vvisRadiusSpinner);
+        addCheckListener(vvisvProjectCheckBox,vvisVProjectField);
+        addCheckListener(vvismpi_pwCheckBox,vvisMPIPW);
+
+        addCheckListener(vradGameCheckBox,vradGameField);
+        addCheckListener(vradThreadCheckBox,vradTreadSpinner);
+        addCheckListener(vradstaticPropSampleScaleCheckBox,vradStaticPropSampleScaleSpinner);
+        addCheckListener(vradlightsCheckBox,vradLightsField);
+        addCheckListener(vradbounceCheckBox,vradbounceSpinner);
+        addCheckListener(vradextraSkyCheckBox,vradextraSkySpinner);
+        addCheckListener(vradsmoothCheckBox,vradsmoothSpinner);
+        addCheckListener(vradluxelDensityCheckBox,vradluxelDensitySpinner);
+        addCheckListener(vradsoftSunCheckBox,vradsoftSunSpinner);
+        addCheckListener(vradmpi_pwCheckBox,vradmpi_pwField);
+        addCheckListener(vradchopCheckBox,vradChopSpinner);
+        addCheckListener(vradmaxChopCheckBox,vradmaxChopSpinner);
+        addCheckListener(vradcompressconstantCheckBox,vradcompressconstantSpinner);
+        addCheckListener(vradvProjectCheckBox,vradvProjectField);
+        addCheckListener(vradmaxDispSampleSizeCheckBox,vradmaxDispSampleSize);
     }
 
     private void addListener(JFrame jFrame){
@@ -310,6 +359,10 @@ public class HCR_Gui{
         buildSettingsChooser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (buildSettingsChooser.getComponentCount() > 1 && buildSettingsChooser.getItemAt(0).equals(unselectedBuildPreset)){
+                    buildSettingsChooser.setSelectedIndex(1);
+                    buildSettingsChooser.removeItem(unselectedBuildPreset);
+                }
                 applyBuildSettings((BuildSettings)buildSettingsChooser.getSelectedItem());
                 buildSettingsChooser.setToolTipText(((BuildSettings)buildSettingsChooser.getSelectedItem()).getComment() != null ? ((BuildSettings)buildSettingsChooser.getSelectedItem()).getComment() : "");
             }
@@ -407,7 +460,11 @@ public class HCR_Gui{
             public void mouseClicked(MouseEvent e) {
                 if(vradLightsField.isEnabled()){
                     openRadDialog.showOpenDialog(jFrame);
-                    vradLightsField.setText(openRadDialog.getSelectedFile().getPath());
+                    try{
+                        vradLightsField.setText(openRadDialog.getSelectedFile().getPath());
+                    } catch (NullPointerException exception){
+                        ConsoleCommander.sendError("No file selected!");
+                    }
                 }
             }
 
@@ -586,15 +643,19 @@ public class HCR_Gui{
 
     private void applyBuildSettings(BuildSettings buildSettings){
 
+        if (buildSettings == null){
+            return;
+        }
+
         if (buildSettings.getVbsp() != null){
             vbspRadioButton.setSelected(true);
             vbspChooser.setSelectedItem(buildSettings.getVbsp());
         }
-        if(buildSettings.getVvis() != null){
+        if (buildSettings.getVvis() != null){
             vvisChooser.setSelectedItem(buildSettings.getVvis());
             vvisRadioButton.setSelected(true);
         }
-        if(buildSettings.getVrad() != null){
+        if (buildSettings.getVrad() != null){
             vradChooser.setSelectedItem(buildSettings.getVrad());
             vradRadioButton.setSelected(true);
         }
@@ -608,49 +669,11 @@ public class HCR_Gui{
         vbspnoDetailCheckBox.setSelected(buildSettings.getVbspSettings().isNoDetail());
         vbspnoWaterCheckBox.setSelected(buildSettings.getVbspSettings().isNoWater());
         vbsplowCheckBox.setSelected(buildSettings.getVbspSettings().isLow());
-
-        if(buildSettings.getVbspSettings().getGame() == null){
-            vbspGameCheckBox.setSelected(false);
-            vbspGameField.setText("");
-            vbspGameField.setEnabled(false);
-        } else {
-            vbspGameCheckBox.setSelected(true);
-            vbspGameField.setText(buildSettings.getVbspSettings().getGame());
-            vbspGameField.setEnabled(true);
-        }
-
-        if(buildSettings.getVbspSettings().getvProject() == null){
-            vbspvProjectCheckBox.setSelected(false);
-            vbspVProjectField.setText("");
-            vbspVProjectField.setEnabled(false);
-        } else {
-            vbspvProjectCheckBox.setSelected(true);
-            vbspVProjectField.setText(buildSettings.getVbspSettings().getvProject());
-            vbspVProjectField.setEnabled(true);
-        }
-
-        if(buildSettings.getVbspSettings().getEmbed() == null){
-            vbspembedCheckBox.setSelected(false);
-            vbspEmbedField.setText("");
-            vbspEmbedField.setEnabled(false);
-        } else {
-            vbspembedCheckBox.setSelected(true);
-            vbspEmbedField.setText(buildSettings.getVbspSettings().getEmbed());
-            vbspEmbedField.setEnabled(true);
-        }
-
+        applyBuildSettingsToComponent(vbspGameCheckBox, vbspGameField, buildSettings.getVbspSettings().getGame());
+        applyBuildSettingsToComponent(vbspvProjectCheckBox, vbspVProjectField, buildSettings.getVbspSettings().getvProject());
+        applyBuildSettingsToComponent(vbspembedCheckBox, vbspEmbedField, buildSettings.getVbspSettings().getEmbed());
         vbspnovConfigCheckBox.setSelected(buildSettings.getVbspSettings().isNoVConfig());
-
-        if (buildSettings.getVbspSettings().getThreads() == null){
-            vbspthreadsCheckBox.setSelected(false);
-            vbspThreadsSpinner.setValue(0);
-            vbspThreadsSpinner.setEnabled(false);
-        } else {
-            vbspthreadsCheckBox.setSelected(true);
-            vbspThreadsSpinner.setValue(buildSettings.getVbspSettings().getThreads());
-            vbspThreadsSpinner.setEnabled(true);
-        }
-
+        applyBuildSettingsToComponent(vbspthreadsCheckBox, vbspThreadsSpinner, buildSettings.getVbspSettings().getThreads());
         vbspverboseEntitiesCheckBox.setSelected(buildSettings.getVbspSettings().isVerbose());
         vbspnoWeldCheckBox.setSelected(buildSettings.getVbspSettings().isNoWeld());
         vbspnoCSGCheckBox.setSelected(buildSettings.getVbspSettings().isNoCSG());
@@ -661,17 +684,7 @@ public class HCR_Gui{
         vbspnoMergeCheckBox.setSelected(buildSettings.getVbspSettings().isNoMerge());
         vbspnoMergeWaterCheckBox.setSelected(buildSettings.getVbspSettings().isNoMergeWater());
         vbspnoSubDivCheckBox.setSelected(buildSettings.getVbspSettings().isNoSubDiv());
-
-        if (buildSettings.getVbspSettings().getMicro() == null){
-            vbspmicroCheckBox.setSelected(false);
-            vbspMicroField.setText("");
-            vbspMicroField.setEnabled(false);
-        } else {
-            vbspmicroCheckBox.setSelected(true);
-            vbspMicroField.setText(buildSettings.getVbspSettings().getMicro()+"");
-            vbspMicroField.setEnabled(true);
-        }
-
+        applyBuildSettingsToComponent(vbspmicroCheckBox, vbspMicroField, buildSettings.getVbspSettings().getMicro());
         vbspfullDetailCheckBox.setSelected(buildSettings.getVbspSettings().isFullDetail());
         vbspleakTestCheckBox.setSelected(buildSettings.getVbspSettings().isLeakTest());
         vbspbumpAllCheckBox.setSelected(buildSettings.getVbspSettings().isBumpAll());
@@ -712,20 +725,9 @@ public class HCR_Gui{
             vbspBlocks4.setText(buildSettings.getVbspSettings().getBlocks4() + "");
             vbspBlocks4.setEnabled(true);
         }
-
         vbspdumpStaticPropsCheckBox.setSelected(buildSettings.getVbspSettings().isDumpStaticProps());
         vbspdumpCollideCheckBox.setSelected(buildSettings.getVbspSettings().isDumpCollide());
-
-        if (buildSettings.getVbspSettings().getLuxelscale() == null){
-            vbspluxelScaleCheckBox.setSelected(false);
-            vbspLuxelScaleSpinner.setValue(0);
-            vbspLuxelScaleSpinner.setEnabled(false);
-        } else {
-            vbspluxelScaleCheckBox.setSelected(true);
-            vbspLuxelScaleSpinner.setValue(buildSettings.getVbspSettings().getLuxelscale());
-            vbspLuxelScaleSpinner.setEnabled(true);
-        }
-
+        applyBuildSettingsToComponent(vbspluxelScaleCheckBox, vbspLuxelScaleSpinner, buildSettings.getVbspSettings().getLuxelscale());
         vbsplightIfMissingCheckBox.setSelected(buildSettings.getVbspSettings().isLightIfMissing());
         vbsplocalPhysXCheckBox.setSelected(buildSettings.getVbspSettings().isLocalphysx());
         vbspkeepStaleZipCheckBox.setSelected(buildSettings.getVbspSettings().isKeepStaleZip());
@@ -733,68 +735,25 @@ public class HCR_Gui{
         vbspfullMinDumpsCheckBox.setSelected(buildSettings.getVbspSettings().isFullMindumps());
 
         //vvis
-        if(buildSettings.getVvisSettings().getGame() == null){
-            vvisGameCheckBox.setSelected(false);
-            vvisGameField.setText("");
-            vvisGameField.setEnabled(false);
-        } else {
-            vvisGameCheckBox.setSelected(true);
-            vvisGameField.setText(buildSettings.getVvisSettings().getGame());
-            vvisGameField.setEnabled(true);
-        }
-
-        if(buildSettings.getVvisSettings().getThreads() == null){
-            vvisthreadsCheckBox.setSelected(false);
-            vvisThreadsSpinner.setValue(0);
-            vvisThreadsSpinner.setEnabled(false);
-        } else {
-            vvisthreadsCheckBox.setSelected(true);
-            vvisThreadsSpinner.setValue(buildSettings.getVvisSettings().getThreads());
-            vvisThreadsSpinner.setEnabled(true);
-        }
-
+        applyBuildSettingsToComponent(vvisGameCheckBox, vvisGameField, buildSettings.getVvisSettings().getGame());
+        applyBuildSettingsToComponent(vvisthreadsCheckBox, vvisThreadsSpinner, buildSettings.getVvisSettings().getThreads());
         vvisverboseCheckBox.setSelected(buildSettings.getVvisSettings().isVerbose());
         vvisLowCheckBox.setSelected(buildSettings.getVvisSettings().isLow());
         vvisnoVConfigCheckBox.setSelected(buildSettings.getVvisSettings().isNoVConfig());
-
-        if (buildSettings.getVvisSettings().getvProject() == null){
-            vvisvProjectCheckBox.setSelected(false);
-            vvisVProjectField.setText("");
-            vvisVProjectField.setEnabled(false);
-        } else {
-            vvisvProjectCheckBox.setSelected(true);
-            vvisVProjectField.setText(buildSettings.getVvisSettings().getvProject());
-            vvisVProjectField.setEnabled(true);
-        }
-
+        applyBuildSettingsToComponent(vvisvProjectCheckBox, vvisVProjectField, buildSettings.getVvisSettings().getvProject());
         vvisfastCheckBox.setSelected(buildSettings.getVvisSettings().isFast());
-
-        if (buildSettings.getVvisSettings().getRadius_override() == null){
-            vvisradius_overrideCheckBox.setSelected(false);
-            vvisRadiusSpinner.setValue(0);
-            vvisRadiusSpinner.setEnabled(false);
-        } else {
-            vvisradius_overrideCheckBox.setSelected(true);
-            vvisRadiusSpinner.setValue(buildSettings.getVvisSettings().getRadius_override());
-            vvisRadiusSpinner.setEnabled(true);
-        }
-
+        applyBuildSettingsToComponent(vvisradius_overrideCheckBox, vvisRadiusSpinner, buildSettings.getVvisSettings().getRadius_override());
         vvisnoSortCheckBox.setSelected(buildSettings.getVvisSettings().isNoSort());
         vvistmpinCheckBox.setSelected(buildSettings.getVvisSettings().isTmpin());
         vvistmpoutCheckBox.setSelected(buildSettings.getVvisSettings().isTmpout());
         vvismpiCheckBox.setSelected(buildSettings.getVvisSettings().isMpi());
-
-        if (buildSettings.getVvisSettings().getMpi_pw() == null){
-            vvismpi_pwCheckBox.setSelected(false);
-            vvisMPIPW.setText("");
-            vvisMPIPW.setEnabled(false);
-        } else {
-            vvismpi_pwCheckBox.setSelected(true);
-            vvisMPIPW.setText(buildSettings.getVvisSettings().getMpi_pw());
-            vvisMPIPW.setEnabled(true);
-        }
+        applyBuildSettingsToComponent(vvismpi_pwCheckBox, vvisMPIPW, buildSettings.getVvisSettings().getMpi_pw());
 
         //vrad
+        vradverboseCheckBox.setSelected(buildSettings.getVradSettings().isVerbose());
+        vradlowCheckBox.setSelected(buildSettings.getVradSettings().isLow());
+        vradnoVConfigCheckBox.setSelected(buildSettings.getVradSettings().isNoVConfig());
+        applyBuildSettingsToComponent(vradvProjectCheckBox,vradvProjectField, buildSettings.getVradSettings().getvProject());
         vradldrCheckBox.setSelected(buildSettings.getVradSettings().isLdr());
         vradhdrCheckBox.setSelected(buildSettings.getVradSettings().isHdr());
         vradbothCheckBox.setSelected(buildSettings.getVradSettings().isBoth());
@@ -803,46 +762,65 @@ public class HCR_Gui{
         vradstaticPropLightingCheckBox.setSelected(buildSettings.getVradSettings().isStaticPropLighting());
         vradstaticPropPolysCheckBox.setSelected(buildSettings.getVradSettings().isStaticPropPolys());
         vradtextureShadowsCheckBox.setSelected(buildSettings.getVradSettings().isTextureShadows());
+        applyBuildSettingsToComponent(vradstaticPropSampleScaleCheckBox, vradStaticPropSampleScaleSpinner, buildSettings.getVradSettings().getStaticPropSampleScale());
+        applyBuildSettingsToComponent(vradbounceCheckBox, vradbounceSpinner, buildSettings.getVradSettings().getBounce());
+        applyBuildSettingsToComponent(vradextraSkyCheckBox, vradextraSkySpinner, buildSettings.getVradSettings().getExtraSky());
+        applyBuildSettingsToComponent(vradsmoothCheckBox, vradsmoothSpinner, buildSettings.getVradSettings().getSmooth());
+        applyBuildSettingsToComponent(vradluxelDensityCheckBox, vradluxelDensitySpinner, buildSettings.getVradSettings().getLuxelDensity());
+        applyBuildSettingsToComponent(vradsoftSunCheckBox, vradsoftSunSpinner, buildSettings.getVradSettings().getSoftSun());
+        vradmpiCheckBox.setSelected(buildSettings.getVradSettings().isMpi());
+        applyBuildSettingsToComponent(vradmpi_pwCheckBox,vradmpi_pwField, buildSettings.getVradSettings().getMpi_pw());
+        vradnoExtraCheckBox.setSelected(buildSettings.getVradSettings().isNoExtra());
+        applyBuildSettingsToComponent(vradchopCheckBox, vradChopSpinner, buildSettings.getVradSettings().getChop());
+        applyBuildSettingsToComponent(vradmaxChopCheckBox, vradmaxChopSpinner, buildSettings.getVradSettings().getMaxChop());
+        vradlargeDispSampleRadiusCheckBox.setSelected(buildSettings.getVradSettings().isLargeDispSampleRadius());
+        applyBuildSettingsToComponent(vradcompressconstantCheckBox, vradcompressconstantSpinner, buildSettings.getVradSettings().getCompressconstant());
+        vradrederrorsCheckBox.setSelected(buildSettings.getVradSettings().isRederrors());
+        vraddumpCheckBox.setSelected(buildSettings.getVradSettings().isDump());
+        vraddumpNormalsCheckBox.setSelected(buildSettings.getVradSettings().isDumpNormals());
+        vraddebugExtraCheckBox.setSelected(buildSettings.getVradSettings().isDebugExtra());
+        vraddlightmapCheckBox.setSelected(buildSettings.getVradSettings().isDlightmap());
+        vradstopOnExitCheckBox.setSelected(buildSettings.getVradSettings().isStopOnExit());
+        vradnoDetailLightCheckBox.setSelected(buildSettings.getVradSettings().isNoDetailLight());
+        vradcenterSamplesCheckBox.setSelected(buildSettings.getVradSettings().isCenterSamples());
+        vradlogHashCheckBox.setSelected(buildSettings.getVradSettings().isLogHash());
+        vradonlyDetailCheckBox.setSelected(buildSettings.getVradSettings().isOnlyDetail());
+        applyBuildSettingsToComponent(vradmaxDispSampleSizeCheckBox, vradmaxDispSampleSize, buildSettings.getVradSettings().getMaxDispSampleSize());
+        vradfullMinidumpCheckBox.setSelected(buildSettings.getVradSettings().isFullMinidump());
+        vradonlyStaticPropsCheckBox.setSelected(buildSettings.getVradSettings().isOnlyStaticProps());
+        vradstaticPropNormalsCheckBox.setSelected(buildSettings.getVradSettings().isStaticPropNormals());
+        vradnoSkyBoxRecurseCheckBox.setSelected(buildSettings.getVradSettings().isNoSkyBoxRecurse());
+        vradnoSPropsCheckBox.setSelected(buildSettings.getVradSettings().isNoSProps());
+        applyBuildSettingsToComponent(vradGameCheckBox, vradGameField, buildSettings.getVradSettings().getGame());
+        applyBuildSettingsToComponent(vradThreadCheckBox, vradTreadSpinner, buildSettings.getVradSettings().getThreads());
+        applyBuildSettingsToComponent(vradlightsCheckBox, vradLightsField, buildSettings.getVradSettings().getLights());
+    }
 
-        if (buildSettings.getVradSettings().getStaticPropSampleScale() == null){
-            vradstaticPropSampleScaleCheckBox.setSelected(false);
-            vradStaticPropSampleScaleSpinner.setValue(0);
-            vradStaticPropSampleScaleSpinner.setEnabled(false);
-        } else {
-            vradstaticPropSampleScaleCheckBox.setSelected(true);
-            vradStaticPropSampleScaleSpinner.setValue(buildSettings.getVradSettings().getStaticPropSampleScale());
-            vradStaticPropSampleScaleSpinner.setEnabled(true);
+    private void applyBuildSettingsToComponent(JCheckBox checkBox, JComponent component, Object value){
+        if (component instanceof JSpinner){
+            JSpinner spinner = (JSpinner) component;
+            if (value == null){
+                checkBox.setSelected(false);
+                spinner.setValue(0);
+                spinner.setEnabled(false);
+            } else {
+                checkBox.setSelected(true);
+                spinner.setValue(value);
+                spinner.setEnabled(true);
+            }
+        } else if (component instanceof JTextField){
+            JTextField area = (JTextField) component;
+            if (value == null){
+                checkBox.setSelected(false);
+                area.setText("");
+                area.setEnabled(false);
+            } else {
+                checkBox.setSelected(true);
+                area.setText((String) value);
+                area.setEnabled(true);
+            }
         }
 
-        if(buildSettings.getVradSettings().getGame() == null){
-            vradGameCheckBox.setSelected(false);
-            vradGameField.setText("");
-            vradGameField.setEnabled(false);
-        } else {
-            vradGameCheckBox.setSelected(true);
-            vradGameField.setText(buildSettings.getVradSettings().getGame());
-            vradGameField.setEnabled(true);
-        }
-
-        if (buildSettings.getVradSettings().getThreads() == null){
-            vradThreadCheckBox.setSelected(false);
-            vradTreadSpinner.setValue(0);
-            vradTreadSpinner.setEnabled(false);
-        } else {
-            vradThreadCheckBox.setSelected(true);
-            vradTreadSpinner.setValue(buildSettings.getVradSettings().getThreads());
-            vradTreadSpinner.setEnabled(true);
-        }
-
-        if (buildSettings.getVradSettings().getLights() == null){
-            vradlightsCheckBox.setSelected(false);
-            vradLightsField.setText("");
-            vradLightsField.setEnabled(false);
-        } else {
-            vradlightsCheckBox.setSelected(true);
-            vradLightsField.setText(buildSettings.getVradSettings().getLights());
-            vradLightsField.setEnabled(true);
-        }
     }
 
     private void addMenuBar(JFrame frame){
@@ -965,5 +943,10 @@ public class HCR_Gui{
 
     public JComboBox getVradChooser() {
         return vradChooser;
+    }
+
+    @Override
+    public void updateContent() {
+
     }
 }

@@ -3,11 +3,10 @@ package de.therazzerapp.hcr.gui.ui;
 import de.therazzerapp.hcr.HCR;
 import de.therazzerapp.hcr.content.BuildSettings;
 import de.therazzerapp.hcr.gui.ConsoleCommander;
+import de.therazzerapp.hcr.gui.ContentUpdater;
 import de.therazzerapp.hcr.managers.BuildSettingsManager;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -19,7 +18,7 @@ import java.awt.event.MouseListener;
  * @author The RaZZeR App <rezzer101@googlemail.com; e-mail@therazzerapp.de>
  * @since <version>
  */
-public class ToolPresets_Gui {
+public class ToolPresets_Gui implements ContentUpdater{
     private JPanel jPanel;
     private JPanel presetsPanel;
     private JPanel selectedPresetPanel;
@@ -49,18 +48,9 @@ public class ToolPresets_Gui {
     }
 
     public ToolPresets_Gui(JFrame jFrame) {
+
         presetList.setModel(defaultListModel);
         presetList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        for (BuildSettings buildSettings : BuildSettingsManager.getBuildSettings()) {
-            defaultListModel.addElement(buildSettings);
-        }
-
-        if(defaultListModel.size() > 0){
-            presetList.setSelectedIndex(0);
-            updateLabel((BuildSettings)presetList.getSelectedValue());
-        }
-
         addListener();
     }
 
@@ -90,7 +80,9 @@ public class ToolPresets_Gui {
         presetList.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                updateLabel((BuildSettings)presetList.getSelectedValue());
+                if(presetList.getSelectedIndex() != -1){
+                    updateLabel((BuildSettings)presetList.getSelectedValue());
+                }
             }
 
             @Override
@@ -118,14 +110,28 @@ public class ToolPresets_Gui {
             @Override
             public void actionPerformed(ActionEvent e) {
                 BuildSettingsManager.removeBuildSetting(((BuildSettings)presetList.getSelectedValue()).getName());
-                HCR.hcr_gui.removeCompilePresetFromList((BuildSettings)presetList.getSelectedValue());
                 ConsoleCommander.sendInfo("Compile preset removed: " + ((BuildSettings)presetList.getSelectedValue()).getDisplayName() + " ("  + ((BuildSettings)presetList.getSelectedValue()).getName() + ")");
-                defaultListModel.removeElement((BuildSettings)presetList.getSelectedValue());
             }
         });
     }
 
     public JPanel getjPanel() {
         return jPanel;
+    }
+
+    @Override
+    public void updateContent() {
+        presetList.setSelectedIndex(-1);
+        defaultListModel.removeAllElements();
+        presetList.removeAll();
+
+        for (BuildSettings buildSettings : BuildSettingsManager.getBuildSettings()) {
+            defaultListModel.addElement(buildSettings);
+        }
+
+        if(defaultListModel.size() > 0){
+            presetList.setSelectedIndex(0);
+            updateLabel((BuildSettings)presetList.getSelectedValue());
+        }
     }
 }

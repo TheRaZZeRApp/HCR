@@ -4,6 +4,7 @@ import de.therazzerapp.hcr.HCR;
 import de.therazzerapp.hcr.content.BuildProgram;
 import de.therazzerapp.hcr.content.BuildSettings;
 import de.therazzerapp.hcr.gui.ConsoleCommander;
+import de.therazzerapp.hcr.gui.ContentUpdater;
 import de.therazzerapp.hcr.managers.BuildProgramManager;
 import de.therazzerapp.hcr.managers.BuildSettingsManager;
 
@@ -17,7 +18,7 @@ import java.awt.event.ActionListener;
  * @author The RaZZeR App <rezzer101@googlemail.com; e-mail@therazzerapp.de>
  * @since <version>
  */
-public class SavePreset_Gui {
+public class SavePreset_Gui implements ContentUpdater{
     private JPanel mainPanel;
     private JPanel overwrirePanel;
     private JPanel savePanel;
@@ -32,6 +33,7 @@ public class SavePreset_Gui {
     private JComboBox vradBox;
     private JButton overwriteButton;
     private JLabel errorLabel;
+    private JEditorPane editorPane1;
 
     public JPanel getOverwrirePanel() {
         return overwrirePanel;
@@ -55,24 +57,9 @@ public class SavePreset_Gui {
 
         addListener(jFrame);
 
-        for(BuildProgram buildProgram : BuildProgramManager.getBuildProgramms()){
-            switch (buildProgram.getBuildProgramType()){
-                case VBSP:
-                    vbspBox.addItem(buildProgram);
-                    break;
-                case VVIS:
-                    vvisBox.addItem(buildProgram);
-                    break;
-                case VRAD:
-                    vradBox.addItem(buildProgram);
-                    break;
-            }
-        }
-
         vbspBox.setSelectedItem(HCR.hcr_gui.getVbspChooser().getSelectedItem());
         vvisBox.setSelectedItem(HCR.hcr_gui.getVbspChooser().getSelectedItem());
         vradBox.setSelectedItem(HCR.hcr_gui.getVradChooser().getSelectedItem());
-
     }
 
     private void reset(){
@@ -122,10 +109,8 @@ public class SavePreset_Gui {
                         commentArea.getText()
                 );
 
-                BuildSettingsManager.addBuildSetting(nameField.getName(),buildSettings);
+                BuildSettingsManager.addBuildSetting(buildSettings);
                 ConsoleCommander.sendInfo("Added compile preset: " + displayNameField.getText() + " (" + nameField.getText() + ")");
-                HCR.hcr_gui.addCompilePresetToList(buildSettings);
-                HCR.toolPresets_gui.addPreset(buildSettings);
                 HCR.savePresetFrame.setVisible(false);
                 reset();
             }
@@ -146,14 +131,9 @@ public class SavePreset_Gui {
                         commentArea.getText()
                 );
 
-                HCR.hcr_gui.removeCompilePresetFromList(BuildSettingsManager.getBuildSetting(nameField.getText()));
-                HCR.toolPresets_gui.removePreset(BuildSettingsManager.getBuildSetting(nameField.getText()));
                 BuildSettingsManager.removeBuildSetting(nameField.getText());
-
-                BuildSettingsManager.addBuildSetting(nameField.getText(),buildSettings);
+                BuildSettingsManager.addBuildSetting(buildSettings);
                 ConsoleCommander.sendInfo("Overwrite compile preset: " + displayNameField.getText() + " (" + nameField.getText() + ")");
-                HCR.hcr_gui.addCompilePresetToList(buildSettings);
-                HCR.toolPresets_gui.addPreset(buildSettings);
                 HCR.savePresetFrame.setVisible(false);
                 reset();
             }
@@ -174,5 +154,25 @@ public class SavePreset_Gui {
                 HCR.savePresetFrame.setVisible(false);
             }
         });
+    }
+
+    @Override
+    public void updateContent() {
+        vbspBox.removeAllItems();
+        vradBox.removeAllItems();
+        vvisBox.removeAllItems();
+        for(BuildProgram buildProgram : BuildProgramManager.getBuildProgramms()){
+            switch (buildProgram.getBuildProgramType()){
+                case VBSP:
+                    vbspBox.addItem(buildProgram);
+                    break;
+                case VVIS:
+                    vvisBox.addItem(buildProgram);
+                    break;
+                case VRAD:
+                    vradBox.addItem(buildProgram);
+                    break;
+            }
+        }
     }
 }

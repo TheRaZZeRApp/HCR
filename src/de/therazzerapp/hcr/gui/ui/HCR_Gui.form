@@ -223,6 +223,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -238,7 +239,9 @@
                                 <constraints>
                                   <grid row="1" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <enabled value="false"/>
+                                </properties>
                               </component>
                               <hspacer id="3a5ca">
                                 <constraints>
@@ -320,6 +323,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -338,6 +342,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -433,7 +438,9 @@
                                 <constraints>
                                   <grid row="31" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <enabled value="false"/>
+                                </properties>
                               </component>
                               <component id="e771f" class="javax.swing.JCheckBox" binding="vbspdumpCollideCheckBox">
                                 <constraints>
@@ -467,6 +474,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -478,6 +486,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -489,6 +498,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -500,6 +510,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -519,6 +530,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -530,6 +542,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -580,6 +593,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -690,6 +704,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -705,7 +720,9 @@
                                 <constraints>
                                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <enabled value="false"/>
+                                </properties>
                               </component>
                               <component id="8bed4" class="javax.swing.JCheckBox" binding="vvisfastCheckBox">
                                 <constraints>
@@ -727,7 +744,9 @@
                                 <constraints>
                                   <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <enabled value="false"/>
+                                </properties>
                               </component>
                               <component id="36cda" class="javax.swing.JCheckBox" binding="vvisnoSortCheckBox">
                                 <constraints>
@@ -784,6 +803,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -810,6 +830,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -879,6 +900,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -894,7 +916,9 @@
                                 <constraints>
                                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <enabled value="false"/>
+                                </properties>
                               </component>
                               <component id="d7a27" class="javax.swing.JCheckBox" binding="vradverboseCheckBox">
                                 <constraints>
@@ -972,7 +996,9 @@
                                 <constraints>
                                   <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <enabled value="false"/>
+                                </properties>
                               </component>
                               <component id="72512" class="javax.swing.JCheckBox" binding="vradlightsCheckBox">
                                 <constraints>
@@ -989,6 +1015,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -1052,7 +1079,9 @@
                                 <constraints>
                                   <grid row="38" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <enabled value="false"/>
+                                </properties>
                               </component>
                               <component id="85e25" class="javax.swing.JCheckBox" binding="vradonlyDetailCheckBox">
                                 <constraints>
@@ -1149,6 +1178,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -1172,7 +1202,9 @@
                                 <constraints>
                                   <grid row="25" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <enabled value="false"/>
+                                </properties>
                               </component>
                               <component id="64ebf" class="javax.swing.JCheckBox" binding="vradlargeDispSampleRadiusCheckBox">
                                 <constraints>
@@ -1194,7 +1226,9 @@
                                 <constraints>
                                   <grid row="23" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <enabled value="false"/>
+                                </properties>
                               </component>
                               <component id="d17af" class="javax.swing.JCheckBox" binding="vradchopCheckBox">
                                 <constraints>
@@ -1208,7 +1242,9 @@
                                 <constraints>
                                   <grid row="22" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <enabled value="false"/>
+                                </properties>
                               </component>
                               <component id="cd63b" class="javax.swing.JCheckBox" binding="vradnoExtraCheckBox">
                                 <constraints>
@@ -1233,6 +1269,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -1264,7 +1301,9 @@
                                 <constraints>
                                   <grid row="17" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <enabled value="false"/>
+                                </properties>
                               </component>
                               <component id="acefb" class="javax.swing.JCheckBox" binding="vradluxelDensityCheckBox">
                                 <constraints>
@@ -1278,7 +1317,9 @@
                                 <constraints>
                                   <grid row="16" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <enabled value="false"/>
+                                </properties>
                               </component>
                               <component id="dbeb2" class="javax.swing.JCheckBox" binding="vradsmoothCheckBox">
                                 <constraints>
@@ -1292,7 +1333,9 @@
                                 <constraints>
                                   <grid row="15" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <enabled value="false"/>
+                                </properties>
                               </component>
                               <component id="cff64" class="javax.swing.JCheckBox" binding="vradextraSkyCheckBox">
                                 <constraints>
@@ -1306,7 +1349,9 @@
                                 <constraints>
                                   <grid row="14" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <enabled value="false"/>
+                                </properties>
                               </component>
                               <component id="aa865" class="javax.swing.JCheckBox" binding="vradbounceCheckBox">
                                 <constraints>
@@ -1320,7 +1365,9 @@
                                 <constraints>
                                   <grid row="13" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <enabled value="false"/>
+                                </properties>
                               </component>
                             </children>
                           </grid>
