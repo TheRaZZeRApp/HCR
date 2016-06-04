@@ -14,6 +14,8 @@ public interface ContentUpdater {
      *          <br>-1 - All
      *          <br> 0 - BuildSettings
      *          <br> 1 - BuildProgram
+     *          <br> 2 - Config
+     *          <br> 3 - LogPattern
      */
     void updateContent(int contentID);
 }

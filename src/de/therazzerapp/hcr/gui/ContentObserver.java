@@ -26,6 +26,8 @@ public class ContentObserver {
      *          <br>-1 - All
      *          <br> 0 - BuildSettings
      *          <br> 1 - BuildProgram
+     *          <br> 2 - Config
+     *          <br> 3 - LogPattern
      */
     public static void update(int contentID){
         for (ContentUpdater contentUpdater : contentUpdaterSet) {

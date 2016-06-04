@@ -2,6 +2,7 @@ package de.therazzerapp.hcr.gui;
 
 import de.therazzerapp.hcr.CompilerLog;
 import de.therazzerapp.hcr.HCR;
+import de.therazzerapp.hcr.managers.LogPatternManager;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
 public class CompilerLogSyncThread extends Thread {
 
     private final CompilerLog log;
+    private StringBuilder line = new StringBuilder();
 
     public CompilerLogSyncThread(CompilerLog log) {
         this.log = log;
@@ -26,11 +28,21 @@ public class CompilerLogSyncThread extends Thread {
 
         while ((newLogs = log.getLastChars()) != null){
             StringBuilder builder = new StringBuilder();
+
             for (char c : newLogs){
+
+                if(c == '\n'){
+                    HCR.hcr_gui.getCompileOutputArea().append(LogPatternManager.formatText(line.toString()));
+                    line.delete(0,line.length()-1);
+                } else {
+                    line.append(c);
+                }
                 builder.append(c);
+
             }
             HCR.hcr_gui.getCompileOutputArea().append(builder.toString());
         }
 
+        HCR.hcr_gui.setCompileButton(false);
     }
 }

@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class CompileQueueSaver {
     public static void save(ArrayList<CompileSet> compileQueue){
-        File file = new File("./compileQueue.json");
+        File file = new File("./Data/compileQueue.json");
         JSONConfig config = new JSONConfig();
         JSONConfigSection root = config.newRootSection();
         for (CompileSet compileSet : compileQueue) {

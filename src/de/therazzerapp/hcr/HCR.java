@@ -98,6 +98,7 @@ public class HCR {
 
     public static void openSavePresetDialog(){
         openSaveDialog(savePreset_gui.getMainPanel());
+        savePreset_gui.updateChooser();
     }
 
     public static void openOverwritePresetDialog(){
@@ -113,6 +114,7 @@ public class HCR {
 
     public static void main(String[] args) {
 
+        HCR.hcr_gui.setCompileButton(false);
         BuildProgramManager.load();
         BuildSettingsManager.load();
         CompileQueueManager.load();
@@ -190,13 +192,11 @@ public class HCR {
                     break;
             }
 
-            if(BuildSettingsManager.containsBuildSettings(selectedBuildSettings)){
-                hcr_gui.applyBuildSettings(BuildSettingsManager.getBuildSetting(selectedBuildSettings));
-            }
-
             if(!BuildSettingsManager.containsBuildSettings(selectedBuildSettings)){
                 ConsoleCommander.sendError("Wrong build preset parameter: " + selectedBuildSettings + " not found!");
             } else {
+                HCR.hcr_gui.setCompileButton(true);
+                hcr_gui.applyBuildSettings(BuildSettingsManager.getBuildSetting(selectedBuildSettings));
                 if(autostart){
                     hcr_gui.getCompileTabbedPane().setSelectedIndex(1);
                     hcr_gui.getVmfFilePathTextFiel().setText(vmfPath);
@@ -211,6 +211,7 @@ public class HCR {
                     compileThread.start();
                     new CompilerLogSyncThread(compileThread.getLog()).start();
 
+                    //todo Problem
                     if(autoclose){
                         Runtime runtime = Runtime.getRuntime();
                         try {

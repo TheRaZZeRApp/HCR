@@ -19,7 +19,7 @@ public class BuildProgramLoader {
     public static Map<String, BuildProgram> load(){
         Map<String, BuildProgram> buildProgramMap = new HashMap<String, BuildProgram>();
 
-        File directory = new File("./content/buildProgs/");
+        File directory = new File("./Data/build_programs/");
         if(!directory.exists()){
             return buildProgramMap;
         }
@@ -37,7 +37,7 @@ public class BuildProgramLoader {
         return new BuildProgram(
                 file.getName().replace(".json",""),
                 root.getString("name"),
-                root.getString("comment"),
+                root.getString("comment",""),
                 root.getString("path"),
                 BuildProgramType.valueOf(root.getString("type")));
     }

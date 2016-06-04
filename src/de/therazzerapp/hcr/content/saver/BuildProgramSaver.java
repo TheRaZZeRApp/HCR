@@ -19,7 +19,7 @@ public class BuildProgramSaver {
         for (Map.Entry<String, BuildProgram> stringBuildProgramEntry : buildProgramMap.entrySet()) {
             JSONConfig config = new JSONConfig();
             JSONConfigSection root = config.newRootSection();
-            File file = new File("./content/buildProgs/" + stringBuildProgramEntry.getKey().toLowerCase() + ".json");
+            File file = new File("./Data/build_programs/" + stringBuildProgramEntry.getKey().toLowerCase() + ".json");
             root.setString("name",stringBuildProgramEntry.getValue().getDisplayName());
             root.setString("comment",stringBuildProgramEntry.getValue().getComment());
             root.setString("path",stringBuildProgramEntry.getValue().getPath());

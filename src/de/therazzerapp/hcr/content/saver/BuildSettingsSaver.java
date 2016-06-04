@@ -19,7 +19,7 @@ import java.util.Map;
 public class BuildSettingsSaver {
 
     public static void rename(BuildSettings buildSettings, String newDisplayName){
-        File file = new File("./content/buildSettings/" + buildSettings.getName() + "/config.json");
+        File file = new File("./Data/compile_presets/" + buildSettings.getName() + "/config.json");
         JSONConfig config = new JSONConfig();
         JSONConfigSection root = config.newRootSection();
         root.setString("name",newDisplayName);
@@ -32,7 +32,7 @@ public class BuildSettingsSaver {
 
     public static void save(Map<String,BuildSettings> buildSettingsMap){
         for (BuildSettings buildSettings : buildSettingsMap.values()) {
-            File directory = new File("./content/buildSettings/" + buildSettings.getName() + "/");
+            File directory = new File("./Data/compile_presets/" + buildSettings.getName() + "/");
             saveVBSP(buildSettings.getVbspSettings(),new File(directory,"vbsp.json"));
             saveVVIS(buildSettings.getVvisSettings(),new File(directory,"vvis.json"));
             saveVRAD(buildSettings.getVradSettings(),new File(directory,"vrad.json"));

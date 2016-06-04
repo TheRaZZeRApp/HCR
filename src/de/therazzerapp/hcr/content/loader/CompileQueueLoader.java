@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class CompileQueueLoader {
     public static ArrayList<CompileSet> load(){
         ArrayList<CompileSet> compileQueue = new ArrayList<>();
-        File file = new File("./compileQueue.json");
+        File file = new File("./Data/compileQueue.json");
         if(!file.exists()){
             return compileQueue;
         }

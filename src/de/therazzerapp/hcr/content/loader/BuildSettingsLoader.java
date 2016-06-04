@@ -23,7 +23,7 @@ public class BuildSettingsLoader {
     public static Map<String,BuildSettings> load(){
         Map<String, BuildSettings> buildSettingsMap = new HashMap<>();
 
-        File directory = new File("./content/buildSettings/");
+        File directory = new File("./Data/compile_presets/");
         if(!directory.exists()){
             return buildSettingsMap;
         }
@@ -39,7 +39,7 @@ public class BuildSettingsLoader {
                     root.getString("vrad").equals("null") ? null : BuildProgramManager.getBuildProgram(root.getString("vrad")),
                     file.getName().replace(".json",""),
                     root.getString("name"),
-                    root.getString("comment")));
+                    root.getString("comment","")));
         }
         return buildSettingsMap;
     }

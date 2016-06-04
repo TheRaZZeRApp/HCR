@@ -48,12 +48,18 @@ public class ToolPresets_Gui implements ContentUpdater{
 
     private void updateLabel(BuildSettings buildSettings){
         nameLabel.setText(buildSettings.getDisplayName() + " (" + buildSettings.getName() + ")");
-        vbspLabel.setText(buildSettings.getVbsp().getDisplayName() + " (" + buildSettings.getVbsp().getPath() + ")");
-        vbspParameterLabel.setText("<html>" + buildSettings.getVbspSettings().getParam(buildSettings.getGameDir()).replace(" -","<br>-") + "</hmlt>");
-        vvisLabel.setText(buildSettings.getVvis().getDisplayName() + " (" + buildSettings.getVvis().getPath() + ")");
-        vvisParameterLabel.setText("<html>" + buildSettings.getVvisSettings().getParam(buildSettings.getGameDir()).replace(" -","<br>-") + "</hmlt>");
-        vradLabel.setText(buildSettings.getVrad().getDisplayName() + " (" + buildSettings.getVrad().getPath() + ")");
-        vradParameterLabel.setText("<html>" + buildSettings.getVradSettings().getParam(buildSettings.getGameDir()).replace(" -","<br>-") + "</hmlt>");
+        if (buildSettings.getVbsp() != null){
+            vbspLabel.setText(buildSettings.getVbsp().getDisplayName() + " (" + buildSettings.getVbsp().getPath() + ")");
+            vbspParameterLabel.setText("<html>" + buildSettings.getVbspSettings().getParam(buildSettings.getGameDir()).replace(" -","<br>-") + "</hmlt>");
+        }
+        if (buildSettings.getVvis() != null){
+            vvisLabel.setText(buildSettings.getVvis().getDisplayName() + " (" + buildSettings.getVvis().getPath() + ")");
+            vvisParameterLabel.setText("<html>" + buildSettings.getVvisSettings().getParam(buildSettings.getGameDir()).replace(" -","<br>-") + "</hmlt>");
+        }
+        if (buildSettings.getVrad() != null){
+            vradLabel.setText(buildSettings.getVrad().getDisplayName() + " (" + buildSettings.getVrad().getPath() + ")");
+            vradParameterLabel.setText("<html>" + buildSettings.getVradSettings().getParam(buildSettings.getGameDir()).replace(" -","<br>-") + "</hmlt>");
+        }
         customGameDirLabel.setText(buildSettings.getGameDir() == null ? "default" : buildSettings.getGameDir());
         commentArea.setText(buildSettings.getComment() == null ? "" : buildSettings.getComment());
     }

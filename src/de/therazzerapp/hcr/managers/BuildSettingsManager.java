@@ -38,7 +38,7 @@ public class BuildSettingsManager {
     }
 
     public static void removeBuildSetting(String name){
-        HCRUtils.deleteDirectory(new File("./content/buildSettings/" + name));
+        HCRUtils.deleteDirectory(new File("./Data/compile_presets/" + name));
         buildSettingsMap.remove(name.toLowerCase());
         save();
         load();

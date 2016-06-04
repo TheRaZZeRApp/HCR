@@ -53,10 +53,10 @@ public class HCR_Gui implements ContentUpdater{
     private JButton chooseVMFFileButton;
     private JPanel queuePane;
     private JCheckBox enableCompileQueueCheckBox;
-    private JButton addButton;
-    private JButton removeButton;
-    private JButton upButton;
-    private JButton downButton;
+    private JButton queueAddButton;
+    private JButton queueRemoveButton;
+    private JButton queueUpButton;
+    private JButton queueDownButton;
     private JPanel vbspPanel;
     private JCheckBox vbspGameCheckBox;
     private JTextField vbspGameField;
@@ -192,6 +192,29 @@ public class HCR_Gui implements ContentUpdater{
     private JButton welcomeSettingsButton;
     private JCheckBox shutDownAfterCompileCheckBox;
     private JTextPane compileOutputAnalysisTextPane;
+    private JList queueList;
+
+    public BuildProgram getSelectedBuildProgram(BuildProgramType type){
+        switch (type){
+            case VBSP:
+                if (vbspChooser.isEnabled()){
+                    return (BuildProgram) vbspChooser.getSelectedItem();
+                }
+                return null;
+            case VVIS:
+                if (vvisChooser.isEnabled()){
+                    return (BuildProgram) vvisChooser.getSelectedItem();
+                }
+                return null;
+            case VRAD:
+                if (vradChooser.isEnabled()){
+                    return (BuildProgram) vradChooser.getSelectedItem();
+                }
+                return null;
+            default:
+                return null;
+        }
+    }
 
     private boolean pauseToggle = false;
 
@@ -296,7 +319,34 @@ public class HCR_Gui implements ContentUpdater{
         addCheckListener(vradmaxDispSampleSizeCheckBox,vradmaxDispSampleSize);
     }
 
+    public void setCompileButton(boolean status){
+        stopButton.setEnabled(status);
+        pauseButton.setEnabled(status);
+        runButton.setEnabled(!status);
+    }
+
     private void addListener(JFrame jFrame){
+
+        enableCompileQueueCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (enableCompileQueueCheckBox.isSelected()){
+                    queuePane.setEnabled(true);
+                    queueAddButton.setEnabled(true);
+                    queueRemoveButton.setEnabled(true);
+                    queueList.setEnabled(true);
+                    queueUpButton.setEnabled(true);
+                    queueDownButton.setEnabled(true);
+                } else {
+                    queuePane.setEnabled(false);
+                    queueAddButton.setEnabled(false);
+                    queueRemoveButton.setEnabled(false);
+                    queueList.setEnabled(false);
+                    queueUpButton.setEnabled(false);
+                    queueDownButton.setEnabled(false);
+                }
+            }
+        });
 
         editPresetsButton.addActionListener(new ActionListener() {
             @Override
@@ -363,6 +413,7 @@ public class HCR_Gui implements ContentUpdater{
         runButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                HCR.hcr_gui.setCompileButton(true);
                 if (compileQueueRadioButton.isSelected()){
                     compileTabbedPane.setSelectedIndex(1);
                     CompileQueueManager.runCompiles();
@@ -603,15 +654,29 @@ public class HCR_Gui implements ContentUpdater{
 
         if (buildSettings.getVbsp() != null){
             vbspRadioButton.setSelected(true);
+            vbspChooser.setEnabled(true);
             vbspChooser.setSelectedItem(buildSettings.getVbsp());
+        } else {
+            vbspRadioButton.setSelected(false);
+            vbspChooser.setEnabled(false);
         }
+
         if (buildSettings.getVvis() != null){
             vvisChooser.setSelectedItem(buildSettings.getVvis());
             vvisRadioButton.setSelected(true);
+            vvisChooser.setEnabled(true);
+        }else {
+            vvisRadioButton.setSelected(false);
+            vvisChooser.setEnabled(false);
         }
+
         if (buildSettings.getVrad() != null){
             vradChooser.setSelectedItem(buildSettings.getVrad());
             vradRadioButton.setSelected(true);
+            vradChooser.setEnabled(true);
+        } else {
+            vradChooser.setEnabled(false);
+            vradRadioButton.setSelected(false);
         }
 
 
@@ -948,11 +1013,11 @@ public class HCR_Gui implements ContentUpdater{
             }
             if (vvisChooser.getItemCount() > 0){
                 vvisChooser.setSelectedIndex(0);
-                vvisChooser.setToolTipText(((BuildProgram)vradChooser.getSelectedItem()).getComment());
+                vvisChooser.setToolTipText(((BuildProgram)vvisChooser.getSelectedItem()).getComment());
             }
             if (vbspChooser.getItemCount() > 0){
                 vbspChooser.setSelectedIndex(0);
-                vbspChooser.setToolTipText(((BuildProgram)vradChooser.getSelectedItem()).getComment());
+                vbspChooser.setToolTipText(((BuildProgram)vbspChooser.getSelectedItem()).getComment());
             }
         }
     }

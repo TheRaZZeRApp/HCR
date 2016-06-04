@@ -1,5 +1,6 @@
 package de.therazzerapp.hcr.managers;
 
+import de.therazzerapp.hcr.HCRUtils;
 import de.therazzerapp.hcr.content.BuildProgram;
 import de.therazzerapp.hcr.content.BuildProgramType;
 import de.therazzerapp.hcr.content.BuildSettings;
@@ -7,6 +8,7 @@ import de.therazzerapp.hcr.content.loader.BuildProgramLoader;
 import de.therazzerapp.hcr.content.saver.BuildProgramSaver;
 import de.therazzerapp.hcr.gui.ContentObserver;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -36,6 +38,7 @@ public class BuildProgramManager {
     }
 
     public static void removeBuildProgram(BuildProgram buildProgram){
+        HCRUtils.deleteDirectory(new File("./Data/build_programs/" + buildProgram.getName()));
         buildProgramMap.remove(buildProgram.getName());
         save();
         ContentObserver.update(1);

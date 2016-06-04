@@ -3,6 +3,7 @@ package de.therazzerapp.hcr.gui.ui;
 import de.therazzerapp.hcr.HCR;
 import de.therazzerapp.hcr.content.BuildProgram;
 import de.therazzerapp.hcr.content.BuildProgramType;
+import de.therazzerapp.hcr.content.BuildSettings;
 import de.therazzerapp.hcr.gui.ConsoleCommander;
 import de.therazzerapp.hcr.gui.ContentUpdater;
 import de.therazzerapp.hcr.gui.GUIUtils;
@@ -42,6 +43,7 @@ public class ToolBuildPrograms_Gui implements ContentUpdater{
     private DefaultListModel vbspDefaultListModel = new DefaultListModel();
     private DefaultListModel vvisDefaultListModel = new DefaultListModel();
     private DefaultListModel vradDefaultListModel = new DefaultListModel();
+    private BuildProgram selectedBuildProgram;
 
     public ToolBuildPrograms_Gui(JFrame jFrame) {
         vbspList.setModel(vbspDefaultListModel);
@@ -58,6 +60,7 @@ public class ToolBuildPrograms_Gui implements ContentUpdater{
             ConsoleCommander.sendError("Build program update error!");
             return;
         }
+        selectedBuildProgram = buildProgram;
         nameLabel.setText(buildProgram.getDisplayName() + " (" + buildProgram.getName() + ")");
         pathLabel.setText(buildProgram.getPath());
         typeLabel.setText(buildProgram.getBuildProgramType() + " (" + buildProgram.getBuildProgramType().getName() + ")");
@@ -158,6 +161,14 @@ public class ToolBuildPrograms_Gui implements ContentUpdater{
 
             }
         });
+
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ConsoleCommander.sendInfo("Compile preset removed: " + selectedBuildProgram.getDisplayName() + " ("  + selectedBuildProgram.getName() + ")");
+                BuildProgramManager.removeBuildProgram(selectedBuildProgram);
+            }
+        });
     }
 
     public JPanel getjPanel() {
@@ -167,6 +178,9 @@ public class ToolBuildPrograms_Gui implements ContentUpdater{
     @Override
     public void updateContent(int contentID) {
         if (contentID == -1 || contentID == 1){
+            vradList.setSelectedIndex(-1);
+            vbspList.setSelectedIndex(-1);
+            vvisList.setSelectedIndex(-1);
             vradDefaultListModel.removeAllElements();
             vbspDefaultListModel.removeAllElements();
             vvisDefaultListModel.removeAllElements();

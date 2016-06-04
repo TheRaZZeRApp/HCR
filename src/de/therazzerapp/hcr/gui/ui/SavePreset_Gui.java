@@ -2,6 +2,7 @@ package de.therazzerapp.hcr.gui.ui;
 
 import de.therazzerapp.hcr.HCR;
 import de.therazzerapp.hcr.content.BuildProgram;
+import de.therazzerapp.hcr.content.BuildProgramType;
 import de.therazzerapp.hcr.content.BuildSettings;
 import de.therazzerapp.hcr.gui.ConsoleCommander;
 import de.therazzerapp.hcr.gui.ContentUpdater;
@@ -34,6 +35,7 @@ public class SavePreset_Gui implements ContentUpdater{
     private JButton overwriteButton;
     private JLabel errorLabel;
     private JEditorPane editorPane1;
+    private String noneItem = "<None>";
 
     public JPanel getOverwrirePanel() {
         return overwrirePanel;
@@ -101,12 +103,12 @@ public class SavePreset_Gui implements ContentUpdater{
                         HCR.hcr_gui.getVradSettings(),
                         HCR.hcr_gui.getVBSPSettings(),
                         HCR.hcr_gui.getVvisSettings(),
-                        (BuildProgram) vbspBox.getSelectedItem(),
-                        (BuildProgram) vvisBox.getSelectedItem(),
-                        (BuildProgram) vradBox.getSelectedItem(),
+                        vbspBox.getSelectedItem().equals(noneItem) ? null : (BuildProgram) vbspBox.getSelectedItem(),
+                        vvisBox.getSelectedItem().equals(noneItem) ? null : (BuildProgram) vvisBox.getSelectedItem(),
+                        vradBox.getSelectedItem().equals(noneItem) ? null : (BuildProgram) vradBox.getSelectedItem(),
                         nameField.getText(),
                         displayNameField.getText(),
-                        commentArea.getText()
+                        commentArea.getText() == null ? "" : commentArea.getText()
                 );
 
                 BuildSettingsManager.addBuildSetting(buildSettings);
@@ -123,12 +125,12 @@ public class SavePreset_Gui implements ContentUpdater{
                         HCR.hcr_gui.getVradSettings(),
                         HCR.hcr_gui.getVBSPSettings(),
                         HCR.hcr_gui.getVvisSettings(),
-                        (BuildProgram) vbspBox.getSelectedItem(),
-                        (BuildProgram) vvisBox.getSelectedItem(),
-                        (BuildProgram) vradBox.getSelectedItem(),
+                        vbspBox.getSelectedItem().equals(noneItem) ? null : (BuildProgram) vbspBox.getSelectedItem(),
+                        vvisBox.getSelectedItem().equals(noneItem) ? null : (BuildProgram) vvisBox.getSelectedItem(),
+                        vradBox.getSelectedItem().equals(noneItem) ? null : (BuildProgram) vradBox.getSelectedItem(),
                         nameField.getText(),
                         displayNameField.getText(),
-                        commentArea.getText()
+                        commentArea.getText() == null ? "" : commentArea.getText()
                 );
 
                 BuildSettingsManager.removeBuildSetting(nameField.getText());
@@ -159,9 +161,15 @@ public class SavePreset_Gui implements ContentUpdater{
     @Override
     public void updateContent(int contentID) {
         if (contentID == -1 || contentID == 1){
+            vbspBox.setSelectedIndex(-1);
+            vvisBox.setSelectedIndex(-1);
+            vradBox.setSelectedIndex(-1);
             vbspBox.removeAllItems();
             vradBox.removeAllItems();
             vvisBox.removeAllItems();
+            vbspBox.addItem(noneItem);
+            vvisBox.addItem(noneItem);
+            vradBox.addItem(noneItem);
             for(BuildProgram buildProgram : BuildProgramManager.getBuildProgramms()){
                 switch (buildProgram.getBuildProgramType()){
                     case VBSP:
@@ -175,6 +183,13 @@ public class SavePreset_Gui implements ContentUpdater{
                         break;
                 }
             }
+            updateChooser();
         }
+    }
+
+    public void updateChooser(){
+        vbspBox.setSelectedItem(HCR.hcr_gui.getSelectedBuildProgram(BuildProgramType.VBSP) == null ? -1 : HCR.hcr_gui.getSelectedBuildProgram(BuildProgramType.VBSP));
+        vvisBox.setSelectedItem(HCR.hcr_gui.getSelectedBuildProgram(BuildProgramType.VVIS) == null ? -1 : HCR.hcr_gui.getSelectedBuildProgram(BuildProgramType.VVIS));
+        vradBox.setSelectedItem(HCR.hcr_gui.getSelectedBuildProgram(BuildProgramType.VRAD) == null ? -1 : HCR.hcr_gui.getSelectedBuildProgram(BuildProgramType.VRAD));
     }
 }

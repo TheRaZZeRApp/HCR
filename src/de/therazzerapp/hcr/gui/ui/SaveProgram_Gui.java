@@ -145,7 +145,7 @@ public class SaveProgram_Gui implements ContentUpdater{
                 BuildProgram buildProgram = new BuildProgram(
                         nameField.getText(),
                         displayNameField.getText(),
-                        commentArea.getText(),
+                        commentArea.getText() == null ? "" : commentArea.getText(),
                         pathField.getText(),
                         (BuildProgramType) typeBox.getSelectedItem()
                 );
