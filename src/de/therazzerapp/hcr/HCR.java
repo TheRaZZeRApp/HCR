@@ -10,11 +10,11 @@ import de.therazzerapp.hcr.gui.ui.*;
 import de.therazzerapp.hcr.managers.BuildProgramManager;
 import de.therazzerapp.hcr.managers.BuildSettingsManager;
 import de.therazzerapp.hcr.managers.CompileQueueManager;
+import de.therazzerapp.hcr.managers.LogPatternManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.URL;
 
 
@@ -118,6 +118,7 @@ public class HCR {
         BuildProgramManager.load();
         BuildSettingsManager.load();
         CompileQueueManager.load();
+        LogPatternManager.load();
 
         URL resource1 = HCR.class.getResource( "images/icon_32.png" );
         mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(resource1));

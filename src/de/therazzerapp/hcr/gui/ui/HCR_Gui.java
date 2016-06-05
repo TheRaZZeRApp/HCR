@@ -1,22 +1,34 @@
 package de.therazzerapp.hcr.gui.ui;
 
 import de.therazzerapp.hcr.HCR;
+import de.therazzerapp.hcr.config.FileReader;
 import de.therazzerapp.hcr.content.*;
 import de.therazzerapp.hcr.filter.RadFileFilter;
 import de.therazzerapp.hcr.filter.VMFFileFilter;
+import de.therazzerapp.hcr.gui.CompileOutputCommander;
 import de.therazzerapp.hcr.gui.CompilerLogSyncThread;
 import de.therazzerapp.hcr.gui.ConsoleCommander;
 import de.therazzerapp.hcr.gui.ContentUpdater;
 import de.therazzerapp.hcr.managers.BuildProgramManager;
 import de.therazzerapp.hcr.managers.BuildSettingsManager;
 import de.therazzerapp.hcr.managers.CompileQueueManager;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 
 /**
  * <description>
@@ -47,7 +59,6 @@ public class HCR_Gui implements ContentUpdater{
     private JButton pauseButton;
     private JTabbedPane tabbedPane1;
     private JTabbedPane compileTabbedPane;
-    private JTextArea compileOutputArea;
     private JScrollPane compileOutputScrollPane;
     private JTextField vmfFilePathTextFiel;
     private JButton chooseVMFFileButton;
@@ -193,6 +204,11 @@ public class HCR_Gui implements ContentUpdater{
     private JCheckBox shutDownAfterCompileCheckBox;
     private JTextPane compileOutputAnalysisTextPane;
     private JList queueList;
+    private JTextPane compileOutputNewPane;
+    private JPanel compileOutputTabbedPande;
+    private JButton exportLogButton;
+    private JButton clearButton;
+    private JEditorPane compileOutputEditorPane;
 
     public BuildProgram getSelectedBuildProgram(BuildProgramType type){
         switch (type){
@@ -258,9 +274,21 @@ public class HCR_Gui implements ContentUpdater{
         }
         */
 
-
-
         addListener(jFrame);
+
+        HTMLEditorKit htmlEditorKit = new HTMLEditorKit();
+        compileOutputNewPane.setEditorKit(htmlEditorKit);
+        StyleSheet styleSheet = htmlEditorKit.getStyleSheet();
+        File logstyle = new File("./Data/logstyle.css");
+        if (logstyle.exists()){
+            for (String rule : FileReader.getFileContent(logstyle)){
+                styleSheet.addRule(rule);
+            }
+        } else {
+            ConsoleCommander.sendError("Can't find compile output log stylesheet!");
+        }
+
+        compileOutputNewPane.setText("<html><div class=\"warning\"> Ein kleiner Test</div> </html>");
 
         VMFFileFilter vmfFileFilter = new VMFFileFilter();
         openVMFDialog.setDialogTitle("Choose a VMF");
@@ -278,7 +306,7 @@ public class HCR_Gui implements ContentUpdater{
 
         addMenuBar(jFrame);
 
-        DefaultCaret caret = (DefaultCaret) compileOutputArea.getCaret();
+        DefaultCaret caret = (DefaultCaret) compileOutputNewPane.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         compileOutputScrollPane.getViewport().setAutoscrolls(true);
 
@@ -317,6 +345,7 @@ public class HCR_Gui implements ContentUpdater{
         addCheckListener(vradcompressconstantCheckBox,vradcompressconstantSpinner);
         addCheckListener(vradvProjectCheckBox,vradvProjectField);
         addCheckListener(vradmaxDispSampleSizeCheckBox,vradmaxDispSampleSize);
+
     }
 
     public void setCompileButton(boolean status){
@@ -326,6 +355,13 @@ public class HCR_Gui implements ContentUpdater{
     }
 
     private void addListener(JFrame jFrame){
+
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CompileOutputCommander.clear();
+            }
+        });
 
         enableCompileQueueCheckBox.addActionListener(new ActionListener() {
             @Override
@@ -413,6 +449,11 @@ public class HCR_Gui implements ContentUpdater{
         runButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (vmfFilePathTextFiel.getText().isEmpty()){
+                    ConsoleCommander.sendError("No vmf file selected!");
+                    return;
+                }
+
                 HCR.hcr_gui.setCompileButton(true);
                 if (compileQueueRadioButton.isSelected()){
                     compileTabbedPane.setSelectedIndex(1);
@@ -936,8 +977,8 @@ public class HCR_Gui implements ContentUpdater{
         help.add(about);
     }
 
-    public JTextArea getCompileOutputArea() {
-        return compileOutputArea;
+    public JTextPane getCompileOutputEditorPane() {
+        return compileOutputNewPane;
     }
 
     public JTextPane getConsoleOutputArea() {

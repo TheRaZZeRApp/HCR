@@ -24,7 +24,7 @@ public class LogPatternLoader {
         }
         JSONConfigSection root = new JSONConfig().load(file);
 
-        for (JSONConfigSection j : root.getConfigSectionArray("pattern")){
+        for (JSONConfigSection j : root.getConfigSectionArray("patterns")){
             logPatternSet.add(new LogPattern(
                     j.getString("pattern"),
                     j.getString("replace")

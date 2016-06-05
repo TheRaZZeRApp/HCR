@@ -32,7 +32,7 @@ public class CompilerLogSyncThread extends Thread {
             for (char c : newLogs){
 
                 if(c == '\n'){
-                    HCR.hcr_gui.getCompileOutputArea().append(LogPatternManager.formatText(line.toString()));
+                    CompileOutputCommander.append(LogPatternManager.formatText(line.toString()));
                     line.delete(0,line.length()-1);
                 } else {
                     line.append(c);
@@ -40,7 +40,7 @@ public class CompilerLogSyncThread extends Thread {
                 builder.append(c);
 
             }
-            HCR.hcr_gui.getCompileOutputArea().append(builder.toString());
+            CompileOutputCommander.append(builder.toString());
         }
 
         HCR.hcr_gui.setCompileButton(false);

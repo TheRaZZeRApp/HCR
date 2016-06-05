@@ -21,7 +21,7 @@ public class LogPatternSaver {
         JSONConfigSection root = config.newRootSection();
 
         for (LogPattern logPattern : logPatternSet) {
-            JSONConfigSection root2 = root.addConfigSectionArrayEntry("pattern");
+            JSONConfigSection root2 = root.addConfigSectionArrayEntry("patterns");
             root2.setString("pattern",logPattern.getPattern().toString());
             root2.setString("replace",logPattern.getReplace());
         }
