@@ -63,5 +63,7 @@ public class CompilerLog {
         }
     }
 
-
+    public String getLog(){
+        return log.toString();
+    }
 }

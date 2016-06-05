@@ -1652,42 +1652,53 @@
                       </component>
                     </children>
                   </grid>
-                  <grid id="25988" binding="compileOutputTabbedPande" layout-manager="GridLayoutManager" row-count="4" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="25988" binding="compileOutputTabbedPande" layout-manager="GridLayoutManager" row-count="5" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <tabbedpane title="Compile Output"/>
                     </constraints>
                     <properties>
                       <autoscrolls value="true"/>
-                      <background color="-7760493"/>
+                      <background color="-8750470"/>
+                      <foreground color="-12303292"/>
                     </properties>
                     <border type="none"/>
                     <children>
                       <scrollpane id="5b2ba" binding="compileOutputScrollPane">
                         <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <grid row="0" column="0" row-span="1" col-span="5" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <autoscrolls value="true"/>
+                          <background color="-12303292"/>
+                          <foreground color="-12303292"/>
+                          <verticalScrollBarPolicy value="20"/>
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="d1d6f" class="javax.swing.JTextPane" binding="compileOutputNewPane">
+                          <grid id="f143b" layout-manager="BorderLayout" hgap="0" vgap="0">
                             <constraints/>
-                            <properties>
-                              <background color="-10592176"/>
-                              <contentType value="text/html"/>
-                              <editable value="false"/>
-                              <enabled value="true"/>
-                              <foreground color="-1"/>
-                              <text value="&lt;html&gt;&#10;  &lt;head&gt;&#10;    &lt;style type=&quot;text/css&quot;&gt;&#10;      &lt;!--&#10;        a { color: red; background-color: white }&#10;        .test { color: RED; background-color: white }&#10;      --&gt;&#10;    &lt;/style&gt;&#10;    &#10;  &lt;/head&gt;&#10;  &lt;body&gt;&#10;    &lt;a&gt;Test &lt;/a&gt;&#10;  &lt;/body&gt;&#10;&lt;/html&gt;&#10;"/>
-                            </properties>
-                          </component>
+                            <properties/>
+                            <border type="none"/>
+                            <children>
+                              <component id="d1d6f" class="javax.swing.JTextPane" binding="compileOutputNewPane">
+                                <constraints border-constraint="Center"/>
+                                <properties>
+                                  <background color="-12303292"/>
+                                  <contentType value="text/html"/>
+                                  <editable value="false"/>
+                                  <enabled value="true"/>
+                                  <foreground color="-12303292"/>
+                                  <text value="&lt;html&gt;&#10;  &lt;head&gt;&#10;    &lt;style type=&quot;text/css&quot;&gt;&#10;      &lt;!--&#10;        a { color: red; background-color: white }&#10;        .test { color: RED; background-color: white }&#10;      --&gt;&#10;    &lt;/style&gt;&#10;    &#10;  &lt;/head&gt;&#10;  &lt;body&gt;&#10;    &lt;a&gt;Test &lt;/a&gt;&#10;  &lt;/body&gt;&#10;&lt;/html&gt;&#10;"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
                         </children>
                       </scrollpane>
                       <component id="f80d3" class="javax.swing.JButton" binding="exportLogButton" default-binding="true">
                         <constraints>
-                          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <text value="Export Log"/>
@@ -1695,7 +1706,7 @@
                       </component>
                       <component id="bad48" class="javax.swing.JButton" binding="clearButton" default-binding="true">
                         <constraints>
-                          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <text value="Clear"/>
@@ -1703,7 +1714,7 @@
                       </component>
                       <vspacer id="caf8b">
                         <constraints>
-                          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
                             <minimum-size width="-1" height="5"/>
                             <preferred-size width="-1" height="5"/>
                             <maximum-size width="-1" height="5"/>
@@ -1712,7 +1723,7 @@
                       </vspacer>
                       <vspacer id="30793">
                         <constraints>
-                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
                             <minimum-size width="-1" height="2"/>
                             <preferred-size width="-1" height="2"/>
                             <maximum-size width="-1" height="2"/>
@@ -1721,7 +1732,7 @@
                       </vspacer>
                       <hspacer id="373a8">
                         <constraints>
-                          <grid row="2" column="0" row-span="2" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                          <grid row="3" column="0" row-span="2" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
                             <minimum-size width="5" height="-1"/>
                             <preferred-size width="5" height="-1"/>
                             <maximum-size width="5" height="-1"/>
@@ -1730,13 +1741,50 @@
                       </hspacer>
                       <hspacer id="6560c">
                         <constraints>
-                          <grid row="2" column="3" row-span="2" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                          <grid row="3" column="4" row-span="2" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
                             <minimum-size width="5" height="-1"/>
                             <preferred-size width="5" height="-1"/>
                             <maximum-size width="5" height="-1"/>
                           </grid>
                         </constraints>
                       </hspacer>
+                      <scrollpane id="ba222">
+                        <constraints>
+                          <grid row="1" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="2" fill="1" indent="0" use-parent-layout="false">
+                            <minimum-size width="-1" height="20"/>
+                            <preferred-size width="-1" height="20"/>
+                            <maximum-size width="-1" height="20"/>
+                          </grid>
+                        </constraints>
+                        <properties>
+                          <autoscrolls value="true"/>
+                          <background color="-12303292"/>
+                          <foreground color="-12303292"/>
+                          <horizontalScrollBarPolicy value="31"/>
+                          <verticalScrollBarPolicy value="21"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <component id="e0529" class="javax.swing.JTextArea" binding="compileOutputLineArea">
+                            <constraints/>
+                            <properties>
+                              <background color="-12303292"/>
+                              <editable value="false"/>
+                              <foreground color="-1"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </scrollpane>
+                      <component id="93d6f" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <font size="14"/>
+                          <foreground color="-2829100"/>
+                          <text value="In Progress:"/>
+                        </properties>
+                      </component>
                     </children>
                   </grid>
                   <grid id="d382d" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

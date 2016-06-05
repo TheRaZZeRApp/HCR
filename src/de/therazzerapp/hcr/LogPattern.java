@@ -15,17 +15,22 @@ public class LogPattern {
     private final String replace;
 
     public LogPattern(String pattern, String replace) {
-        this.pattern = Pattern.compile(pattern);
+        this.pattern = Pattern.compile(pattern, Pattern.DOTALL);
         this.replace = replace;
     }
 
     public String format(String text){
+        text = "CustomMaterialManager: Cached KeyValues materials/models/weapons/v_models/knife_butterfly/knife_butterfly.vmt.";
         Matcher matcher = pattern.matcher(text);
+        System.out.println("in: " + text);
 
         if (matcher.matches()){
+            System.out.println("match");
             String replaceAll = matcher.replaceAll(replace);
+            System.out.println("replace: " + replaceAll);
             for (int x = 1; x <= matcher.groupCount(); x++){
                 replaceAll.replaceAll("$" + x, matcher.group(x));
+            System.out.println("replace group " + x + ": " + replaceAll);
             }
             return replaceAll;
         }

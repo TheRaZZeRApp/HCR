@@ -21,9 +21,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import javax.swing.*;
+import javax.swing.plaf.ComponentUI;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -208,7 +210,12 @@ public class HCR_Gui implements ContentUpdater{
     private JPanel compileOutputTabbedPande;
     private JButton exportLogButton;
     private JButton clearButton;
+    private JTextArea compileOutputLineArea;
     private JEditorPane compileOutputEditorPane;
+
+    public JTextArea getCompileOutputLineArea() {
+        return compileOutputLineArea;
+    }
 
     public BuildProgram getSelectedBuildProgram(BuildProgramType type){
         switch (type){
@@ -287,8 +294,6 @@ public class HCR_Gui implements ContentUpdater{
         } else {
             ConsoleCommander.sendError("Can't find compile output log stylesheet!");
         }
-
-        compileOutputNewPane.setText("<html><div class=\"warning\"> Ein kleiner Test</div> </html>");
 
         VMFFileFilter vmfFileFilter = new VMFFileFilter();
         openVMFDialog.setDialogTitle("Choose a VMF");
@@ -442,7 +447,9 @@ public class HCR_Gui implements ContentUpdater{
                 if (compileThread != null){
                     compileThread.interrupt();
                     compileThread = null;
+                    HCR.hcr_gui.getCompileOutputLineArea().setText("");
                 }
+                HCR.hcr_gui.setCompileButton(false);
             }
         });
 

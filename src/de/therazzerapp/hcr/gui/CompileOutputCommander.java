@@ -2,6 +2,9 @@ package de.therazzerapp.hcr.gui;
 
 import de.therazzerapp.hcr.HCR;
 
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.StyledDocument;
 import java.util.ArrayList;
 
 /**
@@ -11,12 +14,11 @@ import java.util.ArrayList;
  * @since <version>
  */
 public class CompileOutputCommander {
-
     private static ArrayList<String> messages = new ArrayList<>();
 
     public static void append(String text){
         messages.add(text);
-        HCR.hcr_gui.getCompileOutputEditorPane().setText(getText());
+        HCR.hcr_gui.getCompileOutputEditorPane().setText("<html><body color=white>" + getText() + "</body></html>");
     }
 
     private static String getText(){
@@ -30,6 +32,7 @@ public class CompileOutputCommander {
     public static void clear(){
         messages.clear();
         HCR.hcr_gui.getCompileOutputEditorPane().setText("");
+        HCR.hcr_gui.getCompileOutputLineArea().setText("");
         ConsoleCommander.sendInfo("Cleared compile output log!");
     }
 }

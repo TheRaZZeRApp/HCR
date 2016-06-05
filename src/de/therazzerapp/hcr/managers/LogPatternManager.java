@@ -41,6 +41,7 @@ public class LogPatternManager {
 
     public static String formatText(String text){
         for (LogPattern logPattern : logPatternSet) {
+            System.out.println(logPattern.getPattern().toString());
             text = logPattern.format(text);
         }
         return text;

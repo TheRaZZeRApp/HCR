@@ -15,7 +15,6 @@ import java.util.List;
 public class CompilerLogSyncThread extends Thread {
 
     private final CompilerLog log;
-    private StringBuilder line = new StringBuilder();
 
     public CompilerLogSyncThread(CompilerLog log) {
         this.log = log;
@@ -27,22 +26,16 @@ public class CompilerLogSyncThread extends Thread {
         List<Character> newLogs;
 
         while ((newLogs = log.getLastChars()) != null){
-            StringBuilder builder = new StringBuilder();
-
             for (char c : newLogs){
-
-                if(c == '\n'){
-                    CompileOutputCommander.append(LogPatternManager.formatText(line.toString()));
-                    line.delete(0,line.length()-1);
+                if (c == '\n'){
+                    LogPatternManager.formatText(log.getLog());
+                    CompileOutputCommander.append(LogPatternManager.formatText(HCR.hcr_gui.getCompileOutputLineArea().getText()) + "<br>");
+                    HCR.hcr_gui.getCompileOutputLineArea().setText("");
                 } else {
-                    line.append(c);
+                    HCR.hcr_gui.getCompileOutputLineArea().append(""+c);
                 }
-                builder.append(c);
-
             }
-            CompileOutputCommander.append(builder.toString());
         }
-
         HCR.hcr_gui.setCompileButton(false);
     }
 }
