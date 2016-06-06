@@ -211,6 +211,7 @@ public class HCR_Gui implements ContentUpdater{
     private JButton exportLogButton;
     private JButton clearButton;
     private JTextArea compileOutputLineArea;
+    private JButton hideBuildSettingsButton;
     private JEditorPane compileOutputEditorPane;
 
     public JTextArea getCompileOutputLineArea() {
@@ -315,6 +316,8 @@ public class HCR_Gui implements ContentUpdater{
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         compileOutputScrollPane.getViewport().setAutoscrolls(true);
 
+        buildSettingsPanel.setVisible(true);
+
         //CheckBox Listener
         addCheckListener(vbspGameCheckBox,vbspGameField);
         addCheckListener(vbspthreadsCheckBox,vbspThreadsSpinner);
@@ -351,6 +354,18 @@ public class HCR_Gui implements ContentUpdater{
         addCheckListener(vradvProjectCheckBox,vradvProjectField);
         addCheckListener(vradmaxDispSampleSizeCheckBox,vradmaxDispSampleSize);
 
+        hideBuildSettingsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (buildSettingsPanel.isVisible()){
+                    hideBuildSettingsButton.setText(">>");
+                    buildSettingsPanel.setVisible(false);
+                } else {
+                    buildSettingsPanel.setVisible(true);
+                    hideBuildSettingsButton.setText("<<");
+                }
+            }
+        });
     }
 
     public void setCompileButton(boolean status){
@@ -968,8 +983,12 @@ public class HCR_Gui implements ContentUpdater{
             @Override
             public void actionPerformed(ActionEvent e) {
                 openVMFDialog.showOpenDialog(frame);
-                lastSelectedVMF = openVMFDialog.getSelectedFile().getPath();
-                vmfFilePathTextFiel.setText(lastSelectedVMF);
+                if (openVMFDialog.getSelectedFile() != null){
+                    lastSelectedVMF = openVMFDialog.getSelectedFile().getPath();
+                    vmfFilePathTextFiel.setText(lastSelectedVMF);
+                } else {
+                    ConsoleCommander.sendError("No vmf file selected.");
+                }
                 if(welcomePane.isVisible()){
                     mainPanel.setEnabled(true);
                     mainPanel.setVisible(true);

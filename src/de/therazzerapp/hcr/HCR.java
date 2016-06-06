@@ -32,11 +32,6 @@ public class HCR {
     private static String selectedBuildSettings = "";
     private static boolean autostart = false;
     private static boolean autoclose = false;
-    private static CompileSet autostartCompileSet;
-
-    public static CompileSet getAutostartCompileSet() {
-        return autostartCompileSet;
-    }
 
     public static String buildNumber = "b0.0.0";
 
@@ -49,18 +44,6 @@ public class HCR {
     public static final SaveProgram_Gui saveProgram_gui = new SaveProgram_Gui(savePresetFrame);
     public static final ToolPresets_Gui toolPresets_gui = new ToolPresets_Gui(toolPresetsFrame);
     public static final ToolBuildPrograms_Gui toolBuildPrograms_gui = new ToolBuildPrograms_Gui(toolPresetsFrame);
-
-    public static String getVmfPath() {
-        return vmfPath;
-    }
-
-    public static String getSelectedBuildSettings() {
-        return selectedBuildSettings;
-    }
-
-    public static boolean isAutostart() {
-        return autostart;
-    }
 
     public static boolean isAutoclose() {
         return autoclose;
@@ -129,7 +112,7 @@ public class HCR {
         mainFrame.setSize(1000,650);
         mainFrame.setTitle("Hammer Compiler Replacement " + buildNumber);
         mainFrame.setLocationRelativeTo(null);
-        mainFrame.setMinimumSize(new Dimension(900,550));
+        mainFrame.setMinimumSize(new Dimension(970,650));
         mainFrame.setResizable(false);
 
         savePresetFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(resource1));
